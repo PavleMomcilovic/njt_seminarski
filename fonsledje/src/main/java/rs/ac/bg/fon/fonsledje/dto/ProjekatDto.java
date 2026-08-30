@@ -21,4 +21,7 @@ public class ProjekatDto {
 
     @NotNull(message = "Ovo polje je obavezno")
     private Long idStudenta;
+
+    @NotNull(message = "Ovo polje je obavezno")
+    private Long idPredmeta;
 }

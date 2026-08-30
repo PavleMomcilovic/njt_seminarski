@@ -1,7 +1,6 @@
 package rs.ac.bg.fon.fonsledje.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -20,17 +19,15 @@ public class Verifikacija implements Serializable {
     @EmbeddedId
     private VerifikacijaId id;
 
-    @NotBlank(message = "Ovo polje je obavezno")
-    @Column(name = "status", nullable = false)
-    private String status;
-
     @NotNull(message = "Ovo polje je obavezno")
-    @Column(name = "ocena", nullable = false)
+    @Column(name = "status", nullable = false)
+    private Boolean status;
+
+    @Column(name = "ocena")
     private Long ocena;
 
-    @NotNull(message = "Ovo polje je obavezno")
     @Temporal(TemporalType.DATE)
-    @Column(name = "datum", nullable = false)
+    @Column(name = "datum")
     private Date datum;
 
     @MapsId("idStudenta")

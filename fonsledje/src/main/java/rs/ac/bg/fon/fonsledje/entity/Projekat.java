@@ -33,6 +33,10 @@ public class Projekat implements Serializable {
     @JoinColumn(name = "idStudenta", nullable = false)
     private Student student;
 
+    @ManyToOne
+    @JoinColumn(name = "idPredmeta", nullable = false)
+    private Predmet predmet;
+
     @OneToMany(mappedBy = "projekat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Resurs> resursi;
 }

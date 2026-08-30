@@ -31,6 +31,11 @@ public class Resurs implements Serializable {
     @Column(name = "opis", nullable = false)
     private String opis;
 
+    @NotNull(message = "Ovo polje je obavezno")
+    @Lob
+    @Column(name = "sadrzaj", nullable = false)
+    private byte[] sadrzaj;
+
     @MapsId("idProjekta")
     @ManyToOne
     @JoinColumn(name = "idProjekta", nullable = false)

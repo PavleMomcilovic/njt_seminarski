@@ -3,6 +3,7 @@ package rs.ac.bg.fon.fonsledje.converter.impl;
 import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.fonsledje.converter.Converter;
 import rs.ac.bg.fon.fonsledje.dto.ProjekatDto;
+import rs.ac.bg.fon.fonsledje.entity.Predmet;
 import rs.ac.bg.fon.fonsledje.entity.Projekat;
 import rs.ac.bg.fon.fonsledje.entity.Student;
 
@@ -21,6 +22,10 @@ public class ProjekatConverter implements Converter<ProjekatDto, Projekat> {
         student.setIdOsobe(dto.getIdStudenta());
         p.setStudent(student);
 
+        Predmet predmet = new Predmet();
+        predmet.setIdPredmeta(dto.getIdPredmeta());
+        p.setPredmet(predmet);
+
         return p;
     }
 
@@ -32,6 +37,7 @@ public class ProjekatConverter implements Converter<ProjekatDto, Projekat> {
         dto.setNaziv(entity.getNaziv());
         dto.setOpis(entity.getOpis());
         dto.setIdStudenta(entity.getStudent() != null ? entity.getStudent().getIdOsobe() : null);
+        dto.setIdPredmeta(entity.getPredmet() != null ? entity.getPredmet().getIdPredmeta() : null);
         return dto;
     }
 }

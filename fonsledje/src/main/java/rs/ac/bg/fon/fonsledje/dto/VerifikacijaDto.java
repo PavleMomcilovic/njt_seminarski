@@ -1,6 +1,5 @@
 package rs.ac.bg.fon.fonsledje.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -13,13 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class VerifikacijaDto {
-    @NotBlank(message = "Ovo polje je obavezno")
-    private String status;
-
     @NotNull(message = "Ovo polje je obavezno")
+    private Boolean status;
+
     private Long ocena;
 
-    @NotNull(message = "Ovo polje je obavezno")
     private Date datum;
 
     @NotNull(message = "Ovo polje je obavezno")
