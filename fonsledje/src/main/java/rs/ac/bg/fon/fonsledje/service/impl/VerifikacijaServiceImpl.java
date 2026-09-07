@@ -38,7 +38,7 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
     @Override
     public List<VerifikacijaDto> potvrdiPredmete(Long idStudenta, List<Long> idPredmeta) {
         Student student = studentRepository.findById(idStudenta)
-                .orElseThrow(() -> new EntityNotFoundException("Student sa ID " + idStudenta + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Студент са ИД " + idStudenta + " није пронађен."));
 
         List<Verifikacija> kreirane = new ArrayList<>();
         for (Long idPredmet : idPredmeta) {
@@ -47,7 +47,7 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
                 continue;
             }
             Predmet predmet = predmetRepository.findById(idPredmet)
-                    .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + idPredmet + " nije pronađen."));
+                    .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + idPredmet + " није пронађен."));
 
             Verifikacija verifikacija = new Verifikacija();
             verifikacija.setId(id);
@@ -65,7 +65,7 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
         VerifikacijaId id = new VerifikacijaId(idStudenta, idPredmeta);
         Verifikacija verifikacija = verifikacijaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Student nije prijavljen na predmet, verifikacija ne postoji."));
+                        "Студент није пријављен на предмет, верификација не постоји."));
 
         if (dto.getStatus() != null) {
             verifikacija.setStatus(dto.getStatus());

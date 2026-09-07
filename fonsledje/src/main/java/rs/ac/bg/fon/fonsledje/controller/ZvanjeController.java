@@ -27,7 +27,7 @@ public class ZvanjeController {
     public ResponseEntity<Response> getAll() {
         List<ZvanjeDto> zvanja = zvanjeService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađena zvanja.", Map.of("values", zvanja), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађена звања.", Map.of("values", zvanja), HttpStatus.OK)
         );
     }
 }

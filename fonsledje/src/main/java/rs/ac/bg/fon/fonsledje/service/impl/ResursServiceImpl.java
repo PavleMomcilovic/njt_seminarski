@@ -41,28 +41,28 @@ public class ResursServiceImpl implements ResursService {
     @Override
     public ResursDto addResurs(ResursDto dto, MultipartFile file, Long idStudentaUlogovanog) {
         if (dto.getNaziv() == null || dto.getNaziv().isBlank()) {
-            throw new ValidationException("Naziv resursa je obavezan.");
+            throw new ValidationException("Назив ресурса је обавезан.");
         }
         if (dto.getOpis() == null || dto.getOpis().isBlank()) {
-            throw new ValidationException("Opis resursa je obavezan.");
+            throw new ValidationException("Опис ресурса је обавезан.");
         }
         if (dto.getIdProjekta() == null) {
-            throw new ValidationException("Projekat je obavezan.");
+            throw new ValidationException("Пројекат је обавезан.");
         }
         if (dto.getIdTipaResursa() == null) {
-            throw new ValidationException("Tip resursa je obavezan.");
+            throw new ValidationException("Тип ресурса је обавезан.");
         }
         if (file == null || file.isEmpty()) {
-            throw new ValidationException("Fajl je obavezan.");
+            throw new ValidationException("Фајл је обавезан.");
         }
 
         Projekat projekat = projekatRepository.findById(dto.getIdProjekta())
-                .orElseThrow(() -> new EntityNotFoundException("Projekat sa ID " + dto.getIdProjekta() + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Пројекат са ИД " + dto.getIdProjekta() + " није пронађен."));
         if (projekat.getStudent() == null || !projekat.getStudent().getIdOsobe().equals(idStudentaUlogovanog)) {
-            throw new AccessDeniedException("Resurs možete dodati samo na sopstveni projekat.");
+            throw new AccessDeniedException("Ресурс можете додати само на сопствени пројекат.");
         }
         TipResursa tipResursa = tipResursaRepository.findById(dto.getIdTipaResursa())
-                .orElseThrow(() -> new EntityNotFoundException("Tip resursa sa ID " + dto.getIdTipaResursa() + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Тип ресурса са ИД " + dto.getIdTipaResursa() + " није пронађен."));
 
         Long maxId = resursRepository.findMaxIdResursaByProjekat(dto.getIdProjekta());
         long noviId = (maxId == null ? 0 : maxId) + 1;
@@ -77,7 +77,7 @@ public class ResursServiceImpl implements ResursService {
         try {
             resurs.setSadrzaj(file.getBytes());
         } catch (IOException e) {
-            throw new ValidationException("Greška prilikom čitanja fajla.");
+            throw new ValidationException("Грешка приликом читања фајла.");
         }
 
         Resurs saved = resursRepository.save(resurs);
@@ -88,7 +88,7 @@ public class ResursServiceImpl implements ResursService {
     @Transactional(readOnly = true)
     public ResursDto getResurs(ResursId id) {
         Resurs resurs = resursRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resurs nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Ресурс није пронађен."));
         return resursConverter.toDto(resurs);
     }
 
@@ -96,7 +96,7 @@ public class ResursServiceImpl implements ResursService {
     @Transactional(readOnly = true)
     public Resurs preuzmi(ResursId id) {
         return resursRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resurs nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Ресурс није пронађен."));
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ResursServiceImpl implements ResursService {
     @Override
     public ResursDto updateResurs(ResursId id, ResursDto dto, MultipartFile file, Long currentUserId, boolean currentIsProfesor) {
         Resurs resurs = resursRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resurs nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Ресурс није пронађен."));
         proveriVlasnistvo(resurs, currentUserId, currentIsProfesor);
 
         if (dto.getNaziv() != null && !dto.getNaziv().isBlank()) {
@@ -129,7 +129,7 @@ public class ResursServiceImpl implements ResursService {
         }
         if (dto.getIdTipaResursa() != null) {
             TipResursa tipResursa = tipResursaRepository.findById(dto.getIdTipaResursa())
-                    .orElseThrow(() -> new EntityNotFoundException("Tip resursa sa ID " + dto.getIdTipaResursa() + " nije pronađen."));
+                    .orElseThrow(() -> new EntityNotFoundException("Тип ресурса са ИД " + dto.getIdTipaResursa() + " није пронађен."));
             resurs.setTipResursa(tipResursa);
         }
         if (file != null && !file.isEmpty()) {
@@ -137,7 +137,7 @@ public class ResursServiceImpl implements ResursService {
                 resurs.setSadrzaj(file.getBytes());
                 resurs.setVelicina(file.getSize());
             } catch (IOException e) {
-                throw new ValidationException("Greška prilikom čitanja fajla.");
+                throw new ValidationException("Грешка приликом читања фајла.");
             }
         }
 
@@ -148,17 +148,17 @@ public class ResursServiceImpl implements ResursService {
     @Override
     public String deleteResurs(ResursId id, Long currentUserId, boolean currentIsProfesor) {
         Resurs resurs = resursRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resurs nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Ресурс није пронађен."));
         proveriVlasnistvo(resurs, currentUserId, currentIsProfesor);
         resursRepository.delete(resurs);
-        return "Resurs uspešno obrisan.";
+        return "Ресурс успешно обрисан.";
     }
 
     private void proveriVlasnistvo(Resurs resurs, Long currentUserId, boolean currentIsProfesor) {
         boolean vlasnik = resurs.getProjekat() != null && resurs.getProjekat().getStudent() != null
                 && resurs.getProjekat().getStudent().getIdOsobe().equals(currentUserId);
         if (!vlasnik && !currentIsProfesor) {
-            throw new AccessDeniedException("Nemate dozvolu da menjate ovaj resurs.");
+            throw new AccessDeniedException("Немате дозволу да мењате овај ресурс.");
         }
     }
 }

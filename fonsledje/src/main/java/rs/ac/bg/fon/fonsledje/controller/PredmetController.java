@@ -28,7 +28,7 @@ public class PredmetController {
     public ResponseEntity<Response> getAll() {
         List<PredmetDto> predmeti = predmetService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni predmeti.", Map.of("values", predmeti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени предмети.", Map.of("values", predmeti), HttpStatus.OK)
         );
     }
 
@@ -36,7 +36,7 @@ public class PredmetController {
     public ResponseEntity<Response> getById(@PathVariable Long id) {
         PredmetDto predmet = predmetService.findById(id);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađen predmet.", Map.of("value", predmet), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађен предмет.", Map.of("value", predmet), HttpStatus.OK)
         );
     }
 
@@ -44,7 +44,7 @@ public class PredmetController {
     public ResponseEntity<Response> search(@RequestParam(required = false) String naziv) {
         List<PredmetDto> predmeti = predmetService.search(naziv);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni predmeti.", Map.of("values", predmeti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени предмети.", Map.of("values", predmeti), HttpStatus.OK)
         );
     }
 
@@ -53,7 +53,16 @@ public class PredmetController {
     public ResponseEntity<Response> create(@RequestBody PredmetDto dto, @AuthenticationPrincipal OsobaPrincipal principal) {
         PredmetDto saved = predmetService.create(dto, principal.getIdOsobe());
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Uspešno kreiran predmet.", Map.of("value", saved), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Успешно креиран предмет.", Map.of("value", saved), HttpStatus.CREATED)
+        );
+    }
+
+    @PostMapping("/{id}/predajem")
+    @PreAuthorize("hasRole('PROFESOR')")
+    public ResponseEntity<Response> prijaviSe(@PathVariable Long id, @AuthenticationPrincipal OsobaPrincipal principal) {
+        PredmetDto updated = predmetService.prijaviSe(id, principal.getIdOsobe());
+        return ResponseEntity.ok(
+                HttpResponse.getResponseWithData("Успешно пријављени за предавање предмета.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 
@@ -62,7 +71,7 @@ public class PredmetController {
     public ResponseEntity<Response> update(@PathVariable Long id, @RequestBody PredmetDto dto) {
         PredmetDto updated = predmetService.update(id, dto);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno izmenjen predmet.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно измењен предмет.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 
@@ -70,6 +79,6 @@ public class PredmetController {
     @PreAuthorize("hasRole('PROFESOR')")
     public ResponseEntity<Response> delete(@PathVariable Long id) {
         predmetService.delete(id);
-        return ResponseEntity.ok(HttpResponse.getResponse("Uspešno obrisan predmet.", HttpStatus.OK));
+        return ResponseEntity.ok(HttpResponse.getResponse("Успешно обрисан предмет.", HttpStatus.OK));
     }
 }

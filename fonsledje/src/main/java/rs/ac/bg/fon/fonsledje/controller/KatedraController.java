@@ -27,7 +27,7 @@ public class KatedraController {
     public ResponseEntity<Response> getAll() {
         List<KatedraDto> katedre = katedraService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene katedre.", Map.of("values", katedre), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене катедре.", Map.of("values", katedre), HttpStatus.OK)
         );
     }
 }

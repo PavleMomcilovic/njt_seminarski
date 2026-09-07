@@ -28,7 +28,7 @@ public class OsobaController {
     public ResponseEntity<Response> register(@Valid @RequestBody OsobaDto dto) {
         OsobaDto saved = osobaService.register(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Registracija uspešna.", Map.of("value", saved), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Регистрација успешна.", Map.of("value", saved), HttpStatus.CREATED)
         );
     }
 
@@ -36,7 +36,7 @@ public class OsobaController {
     public ResponseEntity<Response> getAll() {
         List<OsobaDto> osobe = osobaService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene osobe.", Map.of("values", osobe), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене особе.", Map.of("values", osobe), HttpStatus.OK)
         );
     }
 
@@ -44,7 +44,7 @@ public class OsobaController {
     public ResponseEntity<Response> getById(@PathVariable Long id) {
         OsobaDto osoba = osobaService.findById(id);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađena osoba.", Map.of("value", osoba), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађена особа.", Map.of("value", osoba), HttpStatus.OK)
         );
     }
 
@@ -53,7 +53,7 @@ public class OsobaController {
                                             @RequestParam(required = false) String prezime) {
         List<OsobaDto> osobe = osobaService.search(ime, prezime);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene osobe.", Map.of("values", osobe), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене особе.", Map.of("values", osobe), HttpStatus.OK)
         );
     }
 
@@ -62,13 +62,13 @@ public class OsobaController {
                                                         @AuthenticationPrincipal OsobaPrincipal principal) {
         OsobaDto updated = osobaService.updateCredentials(id, dto, principal.getIdOsobe(), principal.isProfesor());
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Kredencijali uspešno izmenjeni.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Креденцијали успешно измењени.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Response> delete(@PathVariable Long id, @AuthenticationPrincipal OsobaPrincipal principal) {
         osobaService.delete(id, principal.getIdOsobe(), principal.isProfesor());
-        return ResponseEntity.ok(HttpResponse.getResponse("Nalog uspešno obrisan.", HttpStatus.OK));
+        return ResponseEntity.ok(HttpResponse.getResponse("Налог успешно обрисан.", HttpStatus.OK));
     }
 }

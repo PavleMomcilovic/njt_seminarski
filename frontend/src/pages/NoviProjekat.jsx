@@ -35,18 +35,18 @@ export default function NoviProjekat() {
     setGreska('')
 
     if (!zipFajl) {
-      setGreska('Zip datoteka je obavezna.')
+      setGreska('Зип датотека је обавезна.')
       return
     }
     if (tekstualniFajlovi.length === 0) {
-      setGreska('Bar jedna tekstualna datoteka je obavezna.')
+      setGreska('Бар једна текстуална датотека је обавезна.')
       return
     }
 
     const idZip = nadjiTipResursa('zip')
     const idTekst = nadjiTipResursa('tekst')
     if (!idZip || !idTekst) {
-      setGreska('Tipovi resursa nisu podešeni u bazi.')
+      setGreska('Типови ресурса нису подешени у бази.')
       return
     }
 
@@ -75,23 +75,23 @@ export default function NoviProjekat() {
 
   return (
     <div className="novi-projekat">
-      <h1>Novi projekat{predmet ? ` — ${predmet.naziv}` : ''}</h1>
+      <h1>Нови пројекат{predmet ? ` — ${predmet.naziv}` : ''}</h1>
 
       {greska && <div className="auth-error">{greska}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="auth-field">
-          <label htmlFor="naziv">Naziv projekta</label>
+          <label htmlFor="naziv">Назив пројекта</label>
           <input id="naziv" type="text" value={naziv} onChange={(e) => setNaziv(e.target.value)} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="opis">Opis projekta</label>
+          <label htmlFor="opis">Опис пројекта</label>
           <textarea id="opis" rows={5} value={opis} onChange={(e) => setOpis(e.target.value)} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="zip">Zip datoteka</label>
+          <label htmlFor="zip">Зип датотека</label>
           <input
             id="zip"
             type="file"
@@ -102,7 +102,7 @@ export default function NoviProjekat() {
         </div>
 
         <div className="auth-field">
-          <label htmlFor="tekst">Tekstualne datoteke</label>
+          <label htmlFor="tekst">Текстуалне датотеке</label>
           <input
             id="tekst"
             type="file"
@@ -114,7 +114,7 @@ export default function NoviProjekat() {
         </div>
 
         <button type="submit" className="auth-submit" disabled={ucitava}>
-          {ucitava ? 'Postavljanje...' : 'Postavi projekat'}
+          {ucitava ? 'Постављање...' : 'Постави пројекат'}
         </button>
       </form>
     </div>

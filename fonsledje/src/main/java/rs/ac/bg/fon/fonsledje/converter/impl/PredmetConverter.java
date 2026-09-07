@@ -6,6 +6,9 @@ import rs.ac.bg.fon.fonsledje.dto.PredmetDto;
 import rs.ac.bg.fon.fonsledje.entity.Predmet;
 import rs.ac.bg.fon.fonsledje.entity.Profesor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class PredmetConverter implements Converter<PredmetDto, Predmet> {
 
@@ -34,6 +37,8 @@ public class PredmetConverter implements Converter<PredmetDto, Predmet> {
         dto.setGodina(entity.getGodina());
         dto.setSemestar(entity.getSemestar());
         dto.setIdProfesora(entity.getProfesorOdobrio() != null ? entity.getProfesorOdobrio().getIdOsobe() : null);
+        dto.setIdProfesori(entity.getProfesori() == null ? List.of() :
+                entity.getProfesori().stream().map(Profesor::getIdOsobe).collect(Collectors.toList()));
         return dto;
     }
 }

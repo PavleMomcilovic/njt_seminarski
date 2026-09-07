@@ -8,6 +8,50 @@
   color: var(--text-h);
 }
 
+.glavna-naslov-red {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.glavna-naslov-red h2 {
+  margin: 0 0 16px;
+}
+
+.dodaj-objekat-dugme {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.vest-akcije {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.vest-akcije button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.vest-izmeni {
+  color: var(--accent);
+}
+
+.vest-obrisi {
+  color: #b91c1c;
+}
+
 .glavna-prazno {
   color: var(--text);
   font-size: 15px;

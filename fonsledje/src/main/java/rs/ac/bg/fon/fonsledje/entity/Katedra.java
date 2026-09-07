@@ -21,7 +21,7 @@ public class Katedra implements Serializable {
     @Column(name = "idKatedre", nullable = false, unique = true)
     private Long idKatedre;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 

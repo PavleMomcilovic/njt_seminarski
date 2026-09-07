@@ -7,6 +7,8 @@ import { getKatedre, getZvanja, logout, extractErrorMessage } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 import './Profil.css'
 
+const STATUS_NAZIVI = { AKTIVAN: 'Активан', APSOLVENT: 'Апсолвент', NEAKTIVAN: 'Неактиван' }
+
 function formatDatum(datum) {
   return datum ? new Date(datum).toLocaleDateString('sr-RS') : '-'
 }
@@ -63,7 +65,7 @@ export default function Profil() {
   }
 
   function nazivPredmeta(idPredmeta) {
-    return predmeti.find((p) => p.idPredmeta === idPredmeta)?.naziv || `Predmet #${idPredmeta}`
+    return predmeti.find((p) => p.idPredmeta === idPredmeta)?.naziv || `Предмет #${idPredmeta}`
   }
 
   function postaviIzmenu(idPredmeta, polje, vrednost) {
@@ -96,47 +98,47 @@ export default function Profil() {
       <h1>
         {osoba.ime} {osoba.prezime}
       </h1>
-      <p className="profil-red">Email: {osoba.email}</p>
-      <p className="profil-red">Tip: {osoba.tip === 'STUDENT' ? 'Student' : 'Profesor'}</p>
+      <p className="profil-red">Имејл: {osoba.email}</p>
+      <p className="profil-red">Тип: {osoba.tip === 'STUDENT' ? 'Студент' : 'Професор'}</p>
 
       {osoba.tip === 'STUDENT' && (
         <>
-          <p className="profil-red">Broj indeksa: {osoba.brojIndeksa}</p>
-          <p className="profil-red">Status: {osoba.status}</p>
+          <p className="profil-red">Број индекса: {osoba.brojIndeksa}</p>
+          <p className="profil-red">Статус: {STATUS_NAZIVI[osoba.status] || osoba.status}</p>
         </>
       )}
 
       {osoba.tip === 'PROFESOR' && (
         <>
           <p className="profil-red">
-            Katedra: {katedre.find((k) => k.idKatedre === osoba.idKatedre)?.naziv || '-'}
+            Катедра: {katedre.find((k) => k.idKatedre === osoba.idKatedre)?.naziv || '-'}
           </p>
           <p className="profil-red">
-            Zvanje: {zvanja.find((z) => z.idZvanja === osoba.idZvanja)?.naziv || '-'}
+            Звање: {zvanja.find((z) => z.idZvanja === osoba.idZvanja)?.naziv || '-'}
           </p>
         </>
       )}
 
       {sopstveniProfil && (
         <button type="button" className="profil-logout" onClick={handleLogout}>
-          Odjavi se
+          Одјави се
         </button>
       )}
 
       {osoba.tip === 'STUDENT' && (
         <section className="profil-predmeti">
-          <h2>Predmeti</h2>
+          <h2>Предмети</h2>
           {greska && <div className="profil-greska">{greska}</div>}
           {verifikacije.length === 0 ? (
-            <p>Student nije prijavljen ni na jedan predmet.</p>
+            <p>Студент није пријављен ни на један предмет.</p>
           ) : (
             <table className="verifikacije-tabela">
               <thead>
                 <tr>
-                  <th>Predmet</th>
-                  <th>Status</th>
-                  <th>Ocena</th>
-                  <th>Datum</th>
+                  <th>Предмет</th>
+                  <th>Статус</th>
+                  <th>Оцена</th>
+                  <th>Датум</th>
                   <th></th>
                 </tr>
               </thead>
@@ -155,9 +157,9 @@ export default function Profil() {
                             onChange={(e) => postaviIzmenu(v.idPredmeta, 'status', e.target.checked)}
                           />
                         ) : v.status ? (
-                          'Verifikovan'
+                          'Верификован'
                         ) : (
-                          'Nije verifikovan'
+                          'Није верификован'
                         )}
                       </td>
                       <td>
@@ -187,7 +189,7 @@ export default function Profil() {
                       <td>
                         {mozeDaVerifikuje && (
                           <button type="button" className="verifikacija-sacuvaj" onClick={() => sacuvajVerifikaciju(v)}>
-                            Sačuvaj
+                            Сачувај
                           </button>
                         )}
                       </td>

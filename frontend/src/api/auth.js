@@ -2,12 +2,12 @@ import client from './client'
 
 export function extractErrorMessage(error) {
   const data = error?.response?.data
-  if (!data) return 'Greška prilikom komunikacije sa serverom.'
+  if (!data) return 'Грешка приликом комуникације са сервером.'
   if (data.errors && typeof data.errors === 'object') {
     const prva = Object.values(data.errors)[0]
     if (prva) return prva
   }
-  return data.message || 'Došlo je do greške.'
+  return data.message || 'Дошло је до грешке.'
 }
 
 export async function register(osobaDto) {

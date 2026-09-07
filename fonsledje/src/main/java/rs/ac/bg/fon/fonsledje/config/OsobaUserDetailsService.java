@@ -20,7 +20,7 @@ public class OsobaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Osoba osoba = osobaRepository.findByEmail(email);
         if (osoba == null) {
-            throw new UsernameNotFoundException("Ne postoji nalog sa email-om '" + email + "'.");
+            throw new UsernameNotFoundException("Не постоји налог са имејлом '" + email + "'.");
         }
         return new OsobaPrincipal(osoba);
     }

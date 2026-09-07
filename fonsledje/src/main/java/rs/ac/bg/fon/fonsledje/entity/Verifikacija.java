@@ -19,7 +19,7 @@ public class Verifikacija implements Serializable {
     @EmbeddedId
     private VerifikacijaId id;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Column(name = "status", nullable = false)
     private Boolean status;
 

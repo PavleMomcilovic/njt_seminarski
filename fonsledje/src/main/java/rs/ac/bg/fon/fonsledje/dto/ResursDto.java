@@ -13,18 +13,18 @@ import lombok.*;
 public class ResursDto {
     private Long idResursa;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long velicina;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String opis;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idProjekta;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idTipaResursa;
 }

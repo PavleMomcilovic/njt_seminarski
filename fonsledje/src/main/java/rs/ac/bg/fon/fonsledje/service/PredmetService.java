@@ -7,6 +7,8 @@ import java.util.List;
 public interface PredmetService {
     PredmetDto create(PredmetDto dto, Long idProfesoraUlogovanog);
 
+    PredmetDto prijaviSe(Long idPredmeta, Long idProfesora);
+
     PredmetDto update(Long id, PredmetDto dto);
 
     void delete(Long id);

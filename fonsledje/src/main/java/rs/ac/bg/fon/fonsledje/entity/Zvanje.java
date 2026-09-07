@@ -21,7 +21,7 @@ public class Zvanje implements Serializable {
     @Column(name = "idZvanja", nullable = false, unique = true)
     private Long idZvanja;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 

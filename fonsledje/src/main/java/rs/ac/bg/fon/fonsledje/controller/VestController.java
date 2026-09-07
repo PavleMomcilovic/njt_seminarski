@@ -29,7 +29,7 @@ public class VestController {
     public ResponseEntity<Response> getAll() {
         List<VestDto> vesti = vestService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene vesti.", Map.of("values", vesti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене вести.", Map.of("values", vesti), HttpStatus.OK)
         );
     }
 
@@ -38,7 +38,7 @@ public class VestController {
     public ResponseEntity<Response> create(@RequestBody VestDto dto, @AuthenticationPrincipal OsobaPrincipal principal) {
         VestDto saved = vestService.create(dto, principal.getIdOsobe());
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Uspešno kreirana vest.", Map.of("value", saved), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Успешно креирана вест.", Map.of("value", saved), HttpStatus.CREATED)
         );
     }
 
@@ -48,7 +48,7 @@ public class VestController {
                                             @RequestBody VestDto dto, @AuthenticationPrincipal OsobaPrincipal principal) {
         VestDto updated = vestService.update(new VestId(idProfesora, idVesti), dto, principal.getIdOsobe());
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno izmenjena vest.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно измењена вест.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 
@@ -56,6 +56,6 @@ public class VestController {
     @PreAuthorize("hasRole('PROFESOR')")
     public ResponseEntity<Response> delete(@PathVariable Long idProfesora, @PathVariable Long idVesti) {
         vestService.delete(new VestId(idProfesora, idVesti));
-        return ResponseEntity.ok(HttpResponse.getResponse("Uspešno obrisana vest.", HttpStatus.OK));
+        return ResponseEntity.ok(HttpResponse.getResponse("Успешно обрисана вест.", HttpStatus.OK));
     }
 }

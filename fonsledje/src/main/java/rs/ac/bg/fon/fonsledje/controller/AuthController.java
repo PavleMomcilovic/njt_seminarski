@@ -51,11 +51,11 @@ public class AuthController {
 
             OsobaDto osoba = osobaService.findByEmail(email);
             return ResponseEntity.ok(
-                    HttpResponse.getResponseWithData("Uspešna prijava.", Map.of("value", osoba), HttpStatus.OK)
+                    HttpResponse.getResponseWithData("Успешна пријава.", Map.of("value", osoba), HttpStatus.OK)
             );
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    HttpResponse.getResponse("Pogrešan email ili lozinka.", HttpStatus.UNAUTHORIZED)
+                    HttpResponse.getResponse("Погрешан имејл или лозинка.", HttpStatus.UNAUTHORIZED)
             );
         }
     }
@@ -67,14 +67,14 @@ public class AuthController {
         if (session != null) {
             session.invalidate();
         }
-        return ResponseEntity.ok(HttpResponse.getResponse("Uspešna odjava.", HttpStatus.OK));
+        return ResponseEntity.ok(HttpResponse.getResponse("Успешна одјава.", HttpStatus.OK));
     }
 
     @GetMapping("/me")
     public ResponseEntity<Response> me(@AuthenticationPrincipal OsobaPrincipal principal) {
         OsobaDto osoba = osobaService.findById(principal.getIdOsobe());
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Trenutno ulogovana osoba.", Map.of("value", osoba), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Тренутно улогована особа.", Map.of("value", osoba), HttpStatus.OK)
         );
     }
 }

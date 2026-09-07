@@ -16,7 +16,7 @@ import lombok.ToString;
 public class Student extends Osoba {
     private static final long serialVersionUID = 1L;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "brojIndeksa", nullable = false)
     private String brojIndeksa;
 

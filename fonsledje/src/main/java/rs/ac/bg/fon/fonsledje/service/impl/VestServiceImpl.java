@@ -34,13 +34,13 @@ public class VestServiceImpl implements VestService {
     @Override
     public VestDto create(VestDto dto, Long idProfesoraUlogovanog) {
         if (dto.getNaziv() == null || dto.getNaziv().isBlank()) {
-            throw new ValidationException("Naziv vesti je obavezan.");
+            throw new ValidationException("Назив вести је обавезан.");
         }
         if (dto.getTekst() == null || dto.getTekst().isBlank()) {
-            throw new ValidationException("Tekst vesti je obavezan.");
+            throw new ValidationException("Текст вести је обавезан.");
         }
         Profesor profesor = profesorRepository.findById(idProfesoraUlogovanog)
-                .orElseThrow(() -> new EntityNotFoundException("Profesor sa ID " + idProfesoraUlogovanog + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesoraUlogovanog + " није пронађен."));
 
         Long maxId = vestRepository.findMaxIdVestiByProfesor(idProfesoraUlogovanog);
         long noviId = (maxId == null ? 0 : maxId) + 1;
@@ -59,9 +59,9 @@ public class VestServiceImpl implements VestService {
     @Override
     public VestDto update(VestId id, VestDto dto, Long currentUserId) {
         Vest vest = vestRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Vest nije pronađena."));
+                .orElseThrow(() -> new EntityNotFoundException("Вест није пронађена."));
         if (!id.getIdProfesora().equals(currentUserId)) {
-            throw new AccessDeniedException("Vest možete izmeniti samo ako ste njen autor.");
+            throw new AccessDeniedException("Вест можете изменити само ако сте њен аутор.");
         }
 
         if (dto.getNaziv() != null && !dto.getNaziv().isBlank()) {
@@ -81,7 +81,7 @@ public class VestServiceImpl implements VestService {
     @Override
     public void delete(VestId id) {
         Vest vest = vestRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Vest nije pronađena."));
+                .orElseThrow(() -> new EntityNotFoundException("Вест није пронађена."));
         vestRepository.delete(vest);
     }
 

@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -13,15 +15,17 @@ import lombok.*;
 public class PredmetDto {
     private Long idPredmeta;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long godina;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long semestar;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idProfesora;
+
+    private List<Long> idProfesori;
 }

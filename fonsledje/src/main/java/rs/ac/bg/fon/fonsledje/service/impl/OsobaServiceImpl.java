@@ -43,27 +43,27 @@ public class OsobaServiceImpl implements OsobaService {
     public OsobaDto register(OsobaDto dto) {
         dto.setEmail(dto.getEmail() == null ? null : dto.getEmail().trim().toLowerCase());
         if (dto.getSifra() == null || dto.getSifra().length() < 9) {
-            throw new ValidationException("Lozinka mora imati najmanje 9 karaktera.");
+            throw new ValidationException("Лозинка мора имати најмање 9 карактера.");
         }
         if (osobaRepository.findByEmail(dto.getEmail()) != null) {
-            throw new ValidationException("Nalog sa email-om '" + dto.getEmail() + "' već postoji.");
+            throw new ValidationException("Налог са имејлом '" + dto.getEmail() + "' већ постоји.");
         }
         if (dto.getTip() == TipOsobe.STUDENT) {
             if (dto.getBrojIndeksa() == null || dto.getBrojIndeksa().isBlank()) {
-                throw new ValidationException("Broj indeksa je obavezan za studenta.");
+                throw new ValidationException("Број индекса је обавезан за студента.");
             }
             if (dto.getStatus() == null) {
-                throw new ValidationException("Status je obavezan za studenta.");
+                throw new ValidationException("Статус је обавезан за студента.");
             }
         } else if (dto.getTip() == TipOsobe.PROFESOR) {
             if (dto.getIdKatedre() == null) {
-                throw new ValidationException("Katedra je obavezna za profesora.");
+                throw new ValidationException("Катедра је обавезна за професора.");
             }
             if (dto.getIdZvanja() == null) {
-                throw new ValidationException("Zvanje je obavezno za profesora.");
+                throw new ValidationException("Звање је обавезно за професора.");
             }
         } else {
-            throw new ValidationException("Tip osobe je obavezan.");
+            throw new ValidationException("Тип особе је обавезан.");
         }
 
         dto.setIdOsobe(null);
@@ -77,7 +77,7 @@ public class OsobaServiceImpl implements OsobaService {
     @Transactional(readOnly = true)
     public OsobaDto findById(Long id) {
         Osoba osoba = osobaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Osoba sa ID " + id + " nije pronađena."));
+                .orElseThrow(() -> new EntityNotFoundException("Особа са ИД " + id + " није пронађена."));
         return osobaConverter.toDto(osoba);
     }
 
@@ -86,7 +86,7 @@ public class OsobaServiceImpl implements OsobaService {
     public OsobaDto findByEmail(String email) {
         Osoba osoba = osobaRepository.findByEmail(email);
         if (osoba == null) {
-            throw new EntityNotFoundException("Osoba sa email-om '" + email + "' nije pronađena.");
+            throw new EntityNotFoundException("Особа са имејлом '" + email + "' није пронађена.");
         }
         return osobaConverter.toDto(osoba);
     }
@@ -113,16 +113,16 @@ public class OsobaServiceImpl implements OsobaService {
     @Override
     public OsobaDto updateCredentials(Long id, OsobaDto dto, Long currentUserId, boolean currentIsProfesor) {
         if (!id.equals(currentUserId)) {
-            throw new AccessDeniedException("Kredencijale možete promeniti samo za sopstveni nalog.");
+            throw new AccessDeniedException("Креденцијале можете променити само за сопствени налог.");
         }
         Osoba postojeca = osobaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Osoba sa ID " + id + " nije pronađena."));
+                .orElseThrow(() -> new EntityNotFoundException("Особа са ИД " + id + " није пронађена."));
 
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             String noviEmail = dto.getEmail().trim().toLowerCase();
             Osoba postojiSaEmailom = osobaRepository.findByEmail(noviEmail);
             if (postojiSaEmailom != null && !postojiSaEmailom.getIdOsobe().equals(id)) {
-                throw new ValidationException("Nalog sa email-om '" + noviEmail + "' već postoji.");
+                throw new ValidationException("Налог са имејлом '" + noviEmail + "' већ постоји.");
             }
             postojeca.setEmail(noviEmail);
         }
@@ -134,7 +134,7 @@ public class OsobaServiceImpl implements OsobaService {
         }
         if (dto.getSifra() != null && !dto.getSifra().isBlank()) {
             if (dto.getSifra().length() < 9) {
-                throw new ValidationException("Lozinka mora imati najmanje 9 karaktera.");
+                throw new ValidationException("Лозинка мора имати најмање 9 карактера.");
             }
             postojeca.setSifra(passwordEncoder.encode(dto.getSifra()));
         }
@@ -155,17 +155,17 @@ public class OsobaServiceImpl implements OsobaService {
     @Override
     public void delete(Long id, Long currentUserId, boolean currentIsProfesor) {
         Osoba osoba = osobaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Osoba sa ID " + id + " nije pronađena."));
+                .orElseThrow(() -> new EntityNotFoundException("Особа са ИД " + id + " није пронађена."));
 
         boolean sopstveniNalog = id.equals(currentUserId);
         boolean profesorBrisesStudenta = currentIsProfesor && osoba instanceof Student;
         if (!sopstveniNalog && !profesorBrisesStudenta) {
-            throw new AccessDeniedException("Nemate dozvolu da obrišete ovaj nalog.");
+            throw new AccessDeniedException("Немате дозволу да обришете овај налог.");
         }
 
         if (osoba instanceof Student) {
             if (!projekatRepository.findByStudent_IdOsobe(id).isEmpty()) {
-                throw new ValidationException("Nalog se ne može obrisati jer student ima postavljene projekte.");
+                throw new ValidationException("Налог се не може обрисати јер студент има постављене пројекте.");
             }
             verifikacijaRepository.deleteByStudent_IdOsobe(id);
         }

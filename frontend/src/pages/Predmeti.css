@@ -1,3 +1,16 @@
+.pretraga-input {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  padding: 8px 10px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
 .predmeti-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -42,4 +55,45 @@
 
 .dodaj-projekat-dugme:hover {
   opacity: 0.9;
+}
+
+
+.predmeti-naslov-red {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dodaj-predmet-dugme {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.predmet-akcije {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.predmet-akcije button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.predmet-izmeni {
+  color: var(--accent);
+}
+
+.predmet-obrisi {
+  color: #b91c1c;
 }

@@ -28,7 +28,7 @@ public class ProjekatController {
     public ResponseEntity<Response> getAll() {
         List<ProjekatDto> projekti = projekatService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni projekti.", Map.of("values", projekti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени пројекти.", Map.of("values", projekti), HttpStatus.OK)
         );
     }
 
@@ -36,7 +36,7 @@ public class ProjekatController {
     public ResponseEntity<Response> getByPredmet(@PathVariable Long idPredmeta) {
         List<ProjekatDto> projekti = projekatService.findByPredmet(idPredmeta);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni projekti.", Map.of("values", projekti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени пројекти.", Map.of("values", projekti), HttpStatus.OK)
         );
     }
 
@@ -44,7 +44,7 @@ public class ProjekatController {
     public ResponseEntity<Response> getById(@PathVariable Long id) {
         ProjekatDto projekat = projekatService.findById(id);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađen projekat.", Map.of("value", projekat), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађен пројекат.", Map.of("value", projekat), HttpStatus.OK)
         );
     }
 
@@ -52,7 +52,7 @@ public class ProjekatController {
     public ResponseEntity<Response> search(@RequestParam(required = false) String naziv) {
         List<ProjekatDto> projekti = projekatService.search(naziv);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni projekti.", Map.of("values", projekti), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени пројекти.", Map.of("values", projekti), HttpStatus.OK)
         );
     }
 
@@ -61,7 +61,7 @@ public class ProjekatController {
     public ResponseEntity<Response> create(@RequestBody ProjekatDto dto, @AuthenticationPrincipal OsobaPrincipal principal) {
         ProjekatDto saved = projekatService.create(dto, principal.getIdOsobe());
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Uspešno kreiran projekat.", Map.of("value", saved), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Успешно креиран пројекат.", Map.of("value", saved), HttpStatus.CREATED)
         );
     }
 
@@ -70,13 +70,13 @@ public class ProjekatController {
                                             @AuthenticationPrincipal OsobaPrincipal principal) {
         ProjekatDto updated = projekatService.update(id, dto, principal.getIdOsobe(), principal.isProfesor());
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno izmenjen projekat.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно измењен пројекат.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Response> delete(@PathVariable Long id, @AuthenticationPrincipal OsobaPrincipal principal) {
         projekatService.delete(id, principal.getIdOsobe(), principal.isProfesor());
-        return ResponseEntity.ok(HttpResponse.getResponse("Uspešno obrisan projekat.", HttpStatus.OK));
+        return ResponseEntity.ok(HttpResponse.getResponse("Успешно обрисан пројекат.", HttpStatus.OK));
     }
 }

@@ -27,7 +27,7 @@ public class TipResursaController {
     public ResponseEntity<Response> getAll() {
         List<TipResursaDto> tipovi = tipResursaService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni tipovi resursa.", Map.of("values", tipovi), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени типови ресурса.", Map.of("values", tipovi), HttpStatus.OK)
         );
     }
 }

@@ -15,19 +15,19 @@ import rs.ac.bg.fon.fonsledje.entity.Status;
 public class OsobaDto {
     private Long idOsobe;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Email
     private String email;
 
     private String sifra;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String ime;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String prezime;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private TipOsobe tip;
 
     // Student

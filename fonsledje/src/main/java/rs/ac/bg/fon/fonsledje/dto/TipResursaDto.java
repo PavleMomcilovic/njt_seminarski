@@ -12,6 +12,6 @@ import lombok.*;
 public class TipResursaDto {
     private Long idTipResursa;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 }

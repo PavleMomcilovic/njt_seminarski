@@ -15,15 +15,15 @@ import java.util.Date;
 public class VestDto {
     private Long idVesti;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String tekst;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Date datum;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idProfesora;
 }

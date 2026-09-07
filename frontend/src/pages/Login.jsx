@@ -29,28 +29,28 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <h1>Prijava</h1>
+      <h1>Пријава</h1>
 
       {greska && <div className="auth-error">{greska}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="auth-field">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Имејл</label>
           <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="sifra">Lozinka</label>
+          <label htmlFor="sifra">Лозинка</label>
           <input id="sifra" type="password" value={sifra} onChange={(e) => setSifra(e.target.value)} required />
         </div>
 
         <button type="submit" className="auth-submit" disabled={ucitava}>
-          {ucitava ? 'Prijavljivanje...' : 'Prijavi se'}
+          {ucitava ? 'Пријављивање...' : 'Пријави се'}
         </button>
       </form>
 
       <div className="auth-switch">
-        Nemate nalog? <Link to="/registracija">Registrujte se</Link>
+        Немате налог? <Link to="/registracija">Региструјте се</Link>
       </div>
     </div>
   )

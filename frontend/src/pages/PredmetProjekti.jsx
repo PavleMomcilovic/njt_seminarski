@@ -1,17 +1,33 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getPredmetById } from '../api/predmeti'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import Overlay from '../components/Overlay'
+import { getPredmetById, updatePredmet, deletePredmet } from '../api/predmeti'
 import { getProjektiByPredmet } from '../api/projekti'
 import { getVerifikacijeZaStudenta } from '../api/verifikacije'
+import { extractErrorMessage } from '../api/auth'
+import { odgovaraPretrazi } from '../utils/pretraga'
 import { useAuth } from '../context/AuthContext'
+import './Auth.css'
 import './Predmeti.css'
 
 export default function PredmetProjekti() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { osoba } = useAuth()
   const [predmet, setPredmet] = useState(null)
   const [projekti, setProjekti] = useState([])
   const [verifikovan, setVerifikovan] = useState(false)
+  const [formaPredmet, setFormaPredmet] = useState(null)
+  const [greska, setGreska] = useState('')
+  const [cuva, setCuva] = useState(false)
+  const [pretraga, setPretraga] = useState('')
+
+  const jeProfesor = osoba?.tip === 'PROFESOR'
+
+  const filtriraniProjekti = useMemo(
+    () => projekti.filter((p) => odgovaraPretrazi(p.naziv, pretraga)),
+    [projekti, pretraga]
+  )
 
   useEffect(() => {
     getPredmetById(id).then(setPredmet).catch(() => {})
@@ -26,30 +42,146 @@ export default function PredmetProjekti() {
     }
   }, [id, osoba])
 
+  function otvoriIzmenuPredmeta() {
+    setGreska('')
+    setFormaPredmet({
+      idPredmeta: predmet.idPredmeta,
+      naziv: predmet.naziv,
+      godina: predmet.godina,
+      semestar: predmet.semestar,
+    })
+  }
+
+  async function obrisiPredmet() {
+    if (!window.confirm('Обрисати овај предмет?')) return
+    setGreska('')
+    try {
+      await deletePredmet(predmet.idPredmeta)
+      navigate('/predmeti')
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
+  }
+
+  async function sacuvajPredmet(e) {
+    e.preventDefault()
+    setCuva(true)
+    setGreska('')
+    try {
+      const dto = {
+        naziv: formaPredmet.naziv,
+        godina: Number(formaPredmet.godina),
+        semestar: Number(formaPredmet.semestar),
+      }
+      const azuriran = await updatePredmet(formaPredmet.idPredmeta, dto)
+      setPredmet(azuriran)
+      setFormaPredmet(null)
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    } finally {
+      setCuva(false)
+    }
+  }
+
   return (
     <div>
-      <h1>{predmet ? predmet.naziv : 'Predmet'}</h1>
+      <div className="predmeti-naslov-red">
+        <h1>{predmet ? predmet.naziv : 'Предмет'}</h1>
+        {jeProfesor && predmet && (
+          <div className="predmet-akcije">
+            <button type="button" className="predmet-izmeni" onClick={otvoriIzmenuPredmeta}>
+              Измени
+            </button>
+            <button type="button" className="predmet-obrisi" onClick={obrisiPredmet}>
+              Обриши
+            </button>
+          </div>
+        )}
+      </div>
+
+      {greska && <div className="auth-error">{greska}</div>}
 
       {verifikovan && (
         <Link to={`/predmeti/${id}/novi-projekat`} className="dodaj-projekat-dugme">
-          + Dodaj projekat
+          + Додај пројекат
         </Link>
       )}
 
-      {projekti.length === 0 ? (
-        <p>Za ovaj predmet još nema postavljenih projekata.</p>
+      {projekti.length > 0 && (
+        <input
+          type="text"
+          className="pretraga-input"
+          placeholder="Претражи пројекте..."
+          value={pretraga}
+          onChange={(e) => setPretraga(e.target.value)}
+        />
+      )}
+
+      {filtriraniProjekti.length === 0 ? (
+        <p>
+          {projekti.length === 0
+            ? 'За овај предмет још нема постављених пројеката.'
+            : 'Нема пројеката који одговарају претрази.'}
+        </p>
       ) : (
         <div className="predmeti-grid">
-          {projekti.map((projekat) => (
+          {filtriraniProjekti.map((projekat) => (
             <div className="predmet-kartica" key={projekat.idProjekta}>
               <div className="predmet-naziv">{projekat.naziv}</div>
               <div className="predmet-info">{projekat.opis}</div>
               <Link to={`/osoba/${projekat.idStudenta}`} className="predmet-info">
-                Autor: student #{projekat.idStudenta}
+                Аутор: студент #{projekat.idStudenta}
               </Link>
             </div>
           ))}
         </div>
+      )}
+
+      {formaPredmet && (
+        <Overlay onClose={() => setFormaPredmet(null)}>
+          <h2>Измена предмета</h2>
+          <form onSubmit={sacuvajPredmet}>
+            <div className="auth-field">
+              <label htmlFor="predmet-naziv">Назив</label>
+              <input
+                id="predmet-naziv"
+                type="text"
+                value={formaPredmet.naziv}
+                onChange={(e) => setFormaPredmet({ ...formaPredmet, naziv: e.target.value })}
+                required
+              />
+            </div>
+            <div className="auth-field">
+              <label htmlFor="predmet-godina">Година</label>
+              <input
+                id="predmet-godina"
+                type="number"
+                min={1}
+                max={4}
+                step={1}
+                value={formaPredmet.godina}
+                onChange={(e) => setFormaPredmet({ ...formaPredmet, godina: e.target.value })}
+                required
+              />
+            </div>
+            <div className="auth-field">
+              <label htmlFor="predmet-semestar">Семестар</label>
+              <input
+                id="predmet-semestar"
+                type="number"
+                min={1}
+                max={2}
+                step={1}
+                value={formaPredmet.semestar}
+                onChange={(e) => setFormaPredmet({ ...formaPredmet, semestar: e.target.value })}
+                required
+              />
+            </div>
+            <button type="submit" className="auth-submit" disabled={cuva}>
+              {cuva ? 'Чување...' : 'Сачувај'}
+            </button>
+          </form>
+        </Overlay>
       )}
     </div>
   )

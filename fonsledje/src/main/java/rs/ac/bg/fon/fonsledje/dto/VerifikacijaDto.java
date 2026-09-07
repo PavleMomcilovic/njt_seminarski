@@ -12,19 +12,19 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class VerifikacijaDto {
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Boolean status;
 
     private Long ocena;
 
     private Date datum;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idStudenta;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idPredmeta;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     private Long idProfesora;
 }

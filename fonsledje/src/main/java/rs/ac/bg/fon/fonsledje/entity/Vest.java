@@ -20,15 +20,15 @@ public class Vest implements Serializable {
     @EmbeddedId
     private VestId id;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "tekst", nullable = false, columnDefinition = "TEXT")
     private String tekst;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Temporal(TemporalType.DATE)
     @Column(name = "datum", nullable = false)
     private Date datum;

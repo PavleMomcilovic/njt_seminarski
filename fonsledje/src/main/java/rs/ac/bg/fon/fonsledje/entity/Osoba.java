@@ -25,24 +25,24 @@ public abstract class Osoba implements Serializable {
     @Column(name = "idOsobe")
     private Long idOsobe;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Email
     @Pattern(regexp = "[a-z0-9.]+@(student\\.)?fon\\.bg\\.ac\\.rs$")
     @Size(min = 1, max = 150)
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Size(min = 9, max = 255)
     @Column(name = "sifra", nullable = false)
     private String sifra;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Size(min = 1, max = 100)
     @Column(name = "ime", nullable = false)
     private String ime;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Size(min = 1, max = 100)
     @Column(name = "prezime", nullable = false)
     private String prezime;

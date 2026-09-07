@@ -4,6 +4,7 @@ import { register, getKatedre, getZvanja, extractErrorMessage } from '../api/aut
 import './Auth.css'
 
 const STATUSI = ['AKTIVAN', 'APSOLVENT', 'NEAKTIVAN']
+const STATUS_NAZIVI = { AKTIVAN: 'Активан', APSOLVENT: 'Апсолвент', NEAKTIVAN: 'Неактиван' }
 
 export default function Register() {
   const navigate = useNavigate()
@@ -50,14 +51,14 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <h1>Registracija</h1>
+      <h1>Регистрација</h1>
 
       <div className="auth-tip-toggle">
         <button type="button" className={tip === 'STUDENT' ? 'active' : ''} onClick={() => setTip('STUDENT')}>
-          Student
+          Студент
         </button>
         <button type="button" className={tip === 'PROFESOR' ? 'active' : ''} onClick={() => setTip('PROFESOR')}>
-          Profesor
+          Професор
         </button>
       </div>
 
@@ -65,38 +66,38 @@ export default function Register() {
 
       <form onSubmit={handleSubmit}>
         <div className="auth-field">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Имејл</label>
           <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="sifra">Lozinka</label>
+          <label htmlFor="sifra">Лозинка</label>
           <input id="sifra" type="password" value={sifra} onChange={(e) => setSifra(e.target.value)}
                  minLength={9} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="ime">Ime</label>
+          <label htmlFor="ime">Име</label>
           <input id="ime" type="text" value={ime} onChange={(e) => setIme(e.target.value)} required />
         </div>
 
         <div className="auth-field">
-          <label htmlFor="prezime">Prezime</label>
+          <label htmlFor="prezime">Презиме</label>
           <input id="prezime" type="text" value={prezime} onChange={(e) => setPrezime(e.target.value)} required />
         </div>
 
         {tip === 'STUDENT' ? (
           <>
             <div className="auth-field">
-              <label htmlFor="brojIndeksa">Broj indeksa</label>
+              <label htmlFor="brojIndeksa">Број индекса</label>
               <input id="brojIndeksa" type="text" value={brojIndeksa}
                      onChange={(e) => setBrojIndeksa(e.target.value)} required />
             </div>
             <div className="auth-field">
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">Статус</label>
               <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
                 {STATUSI.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>{STATUS_NAZIVI[s]}</option>
                 ))}
               </select>
             </div>
@@ -104,18 +105,18 @@ export default function Register() {
         ) : (
           <>
             <div className="auth-field">
-              <label htmlFor="idKatedre">Katedra</label>
+              <label htmlFor="idKatedre">Катедра</label>
               <select id="idKatedre" value={idKatedre} onChange={(e) => setIdKatedre(e.target.value)} required>
-                <option value="" disabled>Izaberite katedru</option>
+                <option value="" disabled>Изаберите катедру</option>
                 {katedre.map((k) => (
                   <option key={k.idKatedre} value={k.idKatedre}>{k.naziv}</option>
                 ))}
               </select>
             </div>
             <div className="auth-field">
-              <label htmlFor="idZvanja">Zvanje</label>
+              <label htmlFor="idZvanja">Звање</label>
               <select id="idZvanja" value={idZvanja} onChange={(e) => setIdZvanja(e.target.value)} required>
-                <option value="" disabled>Izaberite zvanje</option>
+                <option value="" disabled>Изаберите звање</option>
                 {zvanja.map((z) => (
                   <option key={z.idZvanja} value={z.idZvanja}>{z.naziv}</option>
                 ))}
@@ -125,12 +126,12 @@ export default function Register() {
         )}
 
         <button type="submit" className="auth-submit" disabled={ucitava}>
-          {ucitava ? 'Registracija u toku...' : 'Registruj se'}
+          {ucitava ? 'Регистрација у току...' : 'Региструј се'}
         </button>
       </form>
 
       <div className="auth-switch">
-        Već imate nalog? <Link to="/login">Prijavite se</Link>
+        Већ имате налог? <Link to="/login">Пријавите се</Link>
       </div>
     </div>
   )

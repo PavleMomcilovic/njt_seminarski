@@ -10,13 +10,13 @@ export default function Carousel({ children }) {
 
   return (
     <div className="carousel">
-      <button type="button" className="carousel-arrow left" onClick={() => scroll(-320)} aria-label="Prethodno">
+      <button type="button" className="carousel-arrow left" onClick={() => scroll(-320)} aria-label="Претходно">
         ‹
       </button>
       <div className="carousel-track" ref={trackRef}>
         {children}
       </div>
-      <button type="button" className="carousel-arrow right" onClick={() => scroll(320)} aria-label="Sledeće">
+      <button type="button" className="carousel-arrow right" onClick={() => scroll(320)} aria-label="Следеће">
         ›
       </button>
     </div>

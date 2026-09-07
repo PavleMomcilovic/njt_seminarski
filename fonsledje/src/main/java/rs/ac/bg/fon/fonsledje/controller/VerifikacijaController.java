@@ -29,7 +29,7 @@ public class VerifikacijaController {
     public ResponseEntity<Response> getAll() {
         List<VerifikacijaDto> verifikacije = verifikacijaService.findAll();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene verifikacije.", Map.of("values", verifikacije), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене верификације.", Map.of("values", verifikacije), HttpStatus.OK)
         );
     }
 
@@ -37,7 +37,7 @@ public class VerifikacijaController {
     public ResponseEntity<Response> getByStudent(@PathVariable Long idStudenta) {
         List<VerifikacijaDto> verifikacije = verifikacijaService.findByStudent(idStudenta);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađene verifikacije.", Map.of("values", verifikacije), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене верификације.", Map.of("values", verifikacije), HttpStatus.OK)
         );
     }
 
@@ -47,7 +47,7 @@ public class VerifikacijaController {
                                                       @AuthenticationPrincipal OsobaPrincipal principal) {
         List<VerifikacijaDto> kreirane = verifikacijaService.potvrdiPredmete(principal.getIdOsobe(), request.getIdPredmeta());
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Uspešno prijavljeni predmeti.", Map.of("values", kreirane), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Успешно пријављени предмети.", Map.of("values", kreirane), HttpStatus.CREATED)
         );
     }
 
@@ -57,7 +57,7 @@ public class VerifikacijaController {
                                                 @RequestBody VerifikacijaDto dto) {
         VerifikacijaDto updated = verifikacijaService.upisiOcenu(idStudenta, idPredmeta, dto);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno upisana verifikacija.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно уписана верификација.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 }

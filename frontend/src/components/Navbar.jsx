@@ -7,17 +7,17 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">FONsleđe</div>
+      <div className="navbar-logo">ФОНслеђе</div>
 
       <div className="navbar-links">
         <NavLink to="/glavna" className={({ isActive }) => (isActive ? 'active' : '')}>
-          Glavna
+          Главна
         </NavLink>
         <NavLink to="/predmeti" className={({ isActive }) => (isActive ? 'active' : '')}>
-          Predmeti
+          Предмети
         </NavLink>
         <NavLink to="/zajednica" className={({ isActive }) => (isActive ? 'active' : '')}>
-          Zajednica
+          Заједница
         </NavLink>
       </div>
 

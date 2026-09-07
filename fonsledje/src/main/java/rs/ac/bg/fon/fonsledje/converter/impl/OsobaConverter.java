@@ -36,7 +36,7 @@ public class OsobaConverter implements Converter<OsobaDto, Osoba> {
             p.setZvanje(zvanje);
             return p;
         }
-        throw new IllegalArgumentException("Nepoznat tip osobe: " + dto.getTip());
+        throw new IllegalArgumentException("Непознат тип особе: " + dto.getTip());
     }
 
     @Override

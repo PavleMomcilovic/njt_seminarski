@@ -21,11 +21,11 @@ public class Projekat implements Serializable {
     @Column(name = "idProjekta", nullable = false, unique = true)
     private Long idProjekta;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "opis", nullable = false, columnDefinition = "TEXT")
     private String opis;
 

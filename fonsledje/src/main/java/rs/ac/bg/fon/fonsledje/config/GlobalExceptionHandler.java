@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
             fieldErrors.put(error.getField(), error.getDefaultMessage());
         }
         Map<String, Object> body = new HashMap<>();
-        body.put("message", "Neispravni podaci.");
+        body.put("message", "Неисправни подаци.");
         body.put("errors", fieldErrors);
         return ResponseEntity.badRequest().body(body);
     }
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
             fieldErrors.put(polje, violation.getMessage());
         }
         Map<String, Object> body = new HashMap<>();
-        body.put("message", "Neispravni podaci.");
+        body.put("message", "Неисправни подаци.");
         body.put("errors", fieldErrors);
         return ResponseEntity.badRequest().body(body);
     }
@@ -60,14 +60,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
         Map<String, String> body = new HashMap<>();
-        body.put("message", "Nemate dozvolu za ovu operaciju.");
+        body.put("message", "Немате дозволу за ову операцију.");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
         Map<String, String> body = new HashMap<>();
-        body.put("message", "Došlo je do greške na serveru.");
+        body.put("message", "Дошло је до грешке на серверу.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }

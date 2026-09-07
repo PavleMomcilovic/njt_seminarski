@@ -43,25 +43,25 @@ public class ProjekatServiceImpl implements ProjekatService {
     @Override
     public ProjekatDto create(ProjekatDto dto, Long idStudentaUlogovanog) {
         if (dto.getNaziv() == null || dto.getNaziv().isBlank()) {
-            throw new ValidationException("Naziv projekta je obavezan.");
+            throw new ValidationException("Назив пројекта је обавезан.");
         }
         if (dto.getOpis() == null || dto.getOpis().isBlank()) {
-            throw new ValidationException("Opis projekta je obavezan.");
+            throw new ValidationException("Опис пројекта је обавезан.");
         }
         if (dto.getIdPredmeta() == null) {
-            throw new ValidationException("Predmet je obavezan.");
+            throw new ValidationException("Предмет је обавезан.");
         }
 
         Student student = studentRepository.findById(idStudentaUlogovanog)
-                .orElseThrow(() -> new EntityNotFoundException("Student sa ID " + idStudentaUlogovanog + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Студент са ИД " + idStudentaUlogovanog + " није пронађен."));
         Predmet predmet = predmetRepository.findById(dto.getIdPredmeta())
-                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + dto.getIdPredmeta() + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + dto.getIdPredmeta() + " није пронађен."));
 
         var verifikacija = verifikacijaRepository.findById(new VerifikacijaId(idStudentaUlogovanog, dto.getIdPredmeta()))
                 .orElseThrow(() -> new ValidationException(
-                        "Morate biti prijavljeni i verifikovani za ovaj predmet da biste postavili projekat."));
+                        "Морате бити пријављени и верификовани за овај предмет да бисте поставили пројекат."));
         if (!Boolean.TRUE.equals(verifikacija.getStatus())) {
-            throw new ValidationException("Niste verifikovani za ovaj predmet, projekat se ne može postaviti.");
+            throw new ValidationException("Нисте верификовани за овај предмет, пројекат се не може поставити.");
         }
 
         Projekat projekat = new Projekat();
@@ -77,7 +77,7 @@ public class ProjekatServiceImpl implements ProjekatService {
     @Override
     public ProjekatDto update(Long id, ProjekatDto dto, Long currentUserId, boolean currentIsProfesor) {
         Projekat projekat = projekatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Projekat sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Пројекат са ИД " + id + " није пронађен."));
         proveriVlasnistvo(projekat, currentUserId, currentIsProfesor);
 
         if (dto.getNaziv() != null && !dto.getNaziv().isBlank()) {
@@ -94,7 +94,7 @@ public class ProjekatServiceImpl implements ProjekatService {
     @Override
     public void delete(Long id, Long currentUserId, boolean currentIsProfesor) {
         Projekat projekat = projekatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Projekat sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Пројекат са ИД " + id + " није пронађен."));
         proveriVlasnistvo(projekat, currentUserId, currentIsProfesor);
         projekatRepository.delete(projekat);
     }
@@ -102,7 +102,7 @@ public class ProjekatServiceImpl implements ProjekatService {
     private void proveriVlasnistvo(Projekat projekat, Long currentUserId, boolean currentIsProfesor) {
         boolean vlasnik = projekat.getStudent() != null && projekat.getStudent().getIdOsobe().equals(currentUserId);
         if (!vlasnik && !currentIsProfesor) {
-            throw new AccessDeniedException("Nemate dozvolu da menjate ovaj projekat.");
+            throw new AccessDeniedException("Немате дозволу да мењате овај пројекат.");
         }
     }
 
@@ -110,7 +110,7 @@ public class ProjekatServiceImpl implements ProjekatService {
     @Transactional(readOnly = true)
     public ProjekatDto findById(Long id) {
         Projekat projekat = projekatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Projekat sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Пројекат са ИД " + id + " није пронађен."));
         return projekatConverter.toDto(projekat);
     }
 

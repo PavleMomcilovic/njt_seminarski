@@ -35,7 +35,7 @@ public class ResursController {
     public ResponseEntity<Response> getAll() {
         List<ResursDto> resursi = resursService.getAllResurs();
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni resursi.", Map.of("values", resursi), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени ресурси.", Map.of("values", resursi), HttpStatus.OK)
         );
     }
 
@@ -43,7 +43,7 @@ public class ResursController {
     public ResponseEntity<Response> getByProjekat(@PathVariable Long idProjekta) {
         List<ResursDto> resursi = resursService.getByProjekat(idProjekta);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađeni resursi.", Map.of("values", resursi), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађени ресурси.", Map.of("values", resursi), HttpStatus.OK)
         );
     }
 
@@ -51,7 +51,7 @@ public class ResursController {
     public ResponseEntity<Response> getById(@PathVariable Long idProjekta, @PathVariable Long idResursa) {
         ResursDto resurs = resursService.getResurs(new ResursId(idProjekta, idResursa));
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno pronađen resurs.", Map.of("value", resurs), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађен ресурс.", Map.of("value", resurs), HttpStatus.OK)
         );
     }
 
@@ -70,7 +70,7 @@ public class ResursController {
                                             @AuthenticationPrincipal OsobaPrincipal principal) {
         ResursDto saved = resursService.addResurs(dto, file, principal.getIdOsobe());
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                HttpResponse.getResponseWithData("Uspešno dodat resurs.", Map.of("value", saved), HttpStatus.CREATED)
+                HttpResponse.getResponseWithData("Успешно додат ресурс.", Map.of("value", saved), HttpStatus.CREATED)
         );
     }
 
@@ -82,7 +82,7 @@ public class ResursController {
         ResursDto updated = resursService.updateResurs(new ResursId(idProjekta, idResursa), dto, file,
                 principal.getIdOsobe(), principal.isProfesor());
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Uspešno izmenjen resurs.", Map.of("value", updated), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно измењен ресурс.", Map.of("value", updated), HttpStatus.OK)
         );
     }
 

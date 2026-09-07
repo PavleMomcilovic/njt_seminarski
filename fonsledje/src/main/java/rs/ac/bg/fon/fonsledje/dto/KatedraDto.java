@@ -12,6 +12,6 @@ import lombok.*;
 public class KatedraDto {
     private Long idKatedre;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 }

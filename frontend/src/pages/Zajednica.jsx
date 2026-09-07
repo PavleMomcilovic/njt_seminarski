@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getOsobe } from '../api/osobe'
 import './Zajednica.css'
+import { odgovaraPretrazi } from '../utils/pretraga'
 
 export default function Zajednica() {
   const navigate = useNavigate()
   const [osobe, setOsobe] = useState([])
+  const [pretraga, setPretraga] = useState('')
 
   useEffect(() => {
     getOsobe().then(setOsobe).catch(() => {})
@@ -13,14 +15,14 @@ export default function Zajednica() {
 
   return (
     <div>
-      <h1>Zajednica</h1>
+      <h1>Заједница</h1>
       <div className="osobe-lista">
         {osobe.map((osoba) => (
           <div className="osoba-kartica" key={osoba.idOsobe} onClick={() => navigate(`/osoba/${osoba.idOsobe}`)}>
             <div className="osoba-ime">
               {osoba.ime} {osoba.prezime}
             </div>
-            <div className="osoba-tip">{osoba.tip === 'STUDENT' ? 'Student' : 'Profesor'}</div>
+            <div className="osoba-tip">{osoba.tip === 'STUDENT' ? 'Студент' : 'Професор'}</div>
           </div>
         ))}
       </div>

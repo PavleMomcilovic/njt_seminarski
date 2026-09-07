@@ -21,19 +21,19 @@ public class Resurs implements Serializable {
     @EmbeddedId
     private ResursId id;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Column(name = "velicina", nullable = false)
     private Long velicina;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "opis", nullable = false, columnDefinition = "TEXT")
     private String opis;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @JdbcTypeCode(SqlTypes.VARBINARY)
     @Column(name = "sadrzaj", nullable = false)
     private byte[] sadrzaj;

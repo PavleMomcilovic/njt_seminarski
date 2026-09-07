@@ -21,6 +21,6 @@ public class TipResursa implements Serializable {
     private Long idTipaResursa;
 
     @Column(name = "naziv", nullable = false)
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     private String naziv;
 }

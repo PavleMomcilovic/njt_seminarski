@@ -33,22 +33,36 @@ public class PredmetServiceImpl implements PredmetService {
     @Override
     public PredmetDto create(PredmetDto dto, Long idProfesoraUlogovanog) {
         if (dto.getNaziv() == null || dto.getNaziv().isBlank()) {
-            throw new ValidationException("Naziv predmeta je obavezan.");
+            throw new ValidationException("Назив предмета је обавезан.");
         }
         if (dto.getGodina() == null) {
-            throw new ValidationException("Godina je obavezna.");
+            throw new ValidationException("Година је обавезна.");
         }
         if (dto.getSemestar() == null) {
-            throw new ValidationException("Semestar je obavezan.");
+            throw new ValidationException("Семестар је обавезан.");
         }
         Profesor profesor = profesorRepository.findById(idProfesoraUlogovanog)
-                .orElseThrow(() -> new EntityNotFoundException("Profesor sa ID " + idProfesoraUlogovanog + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesoraUlogovanog + " није пронађен."));
 
         Predmet predmet = new Predmet();
         predmet.setNaziv(dto.getNaziv());
         predmet.setGodina(dto.getGodina());
         predmet.setSemestar(dto.getSemestar());
         predmet.setProfesorOdobrio(profesor);
+        predmet.getProfesori().add(profesor);
+
+        Predmet saved = predmetRepository.save(predmet);
+        return predmetConverter.toDto(saved);
+    }
+
+    @Override
+    public PredmetDto prijaviSe(Long idPredmeta, Long idProfesora) {
+        Predmet predmet = predmetRepository.findById(idPredmeta)
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + idPredmeta + " није пронађен."));
+        Profesor profesor = profesorRepository.findById(idProfesora)
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesora + " није пронађен."));
+
+        predmet.getProfesori().add(profesor);
 
         Predmet saved = predmetRepository.save(predmet);
         return predmetConverter.toDto(saved);
@@ -57,7 +71,7 @@ public class PredmetServiceImpl implements PredmetService {
     @Override
     public PredmetDto update(Long id, PredmetDto dto) {
         Predmet predmet = predmetRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + id + " није пронађен."));
 
         if (dto.getNaziv() != null && !dto.getNaziv().isBlank()) {
             predmet.setNaziv(dto.getNaziv());
@@ -76,7 +90,7 @@ public class PredmetServiceImpl implements PredmetService {
     @Override
     public void delete(Long id) {
         Predmet predmet = predmetRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + id + " није пронађен."));
         predmetRepository.delete(predmet);
     }
 
@@ -84,7 +98,7 @@ public class PredmetServiceImpl implements PredmetService {
     @Transactional(readOnly = true)
     public PredmetDto findById(Long id) {
         Predmet predmet = predmetRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " nije pronađen."));
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + id + " није пронађен."));
         return predmetConverter.toDto(predmet);
     }
 

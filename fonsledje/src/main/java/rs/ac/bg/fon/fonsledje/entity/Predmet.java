@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "predmet")
@@ -21,19 +23,28 @@ public class Predmet implements Serializable {
     @Column(name = "idPredmeta", nullable = false, unique = true)
     private Long idPredmeta;
 
-    @NotBlank(message = "Ovo polje je obavezno")
+    @NotBlank(message = "Ово поље је обавезно")
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Column(name = "godina", nullable = false)
     private Long godina;
 
-    @NotNull(message = "Ovo polje je obavezno")
+    @NotNull(message = "Ово поље је обавезно")
     @Column(name = "semestar", nullable = false)
     private Long semestar;
 
     @ManyToOne
     @JoinColumn(name = "idProfesora", nullable = false)
     private Profesor profesorOdobrio;
+
+    @ManyToMany
+    @JoinTable(
+            name = "predmet_prof",
+            joinColumns = @JoinColumn(name = "idPredmeta"),
+            inverseJoinColumns = @JoinColumn(name = "idProfesora")
+    )
+    @Builder.Default
+    private Set<Profesor> profesori = new HashSet<>();
 }
