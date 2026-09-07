@@ -35,10 +35,6 @@ public class Predmet implements Serializable {
     @Column(name = "semestar", nullable = false)
     private Long semestar;
 
-    @ManyToOne
-    @JoinColumn(name = "idProfesora", nullable = false)
-    private Profesor profesorOdobrio;
-
     @ManyToMany
     @JoinTable(
             name = "predmet_prof",

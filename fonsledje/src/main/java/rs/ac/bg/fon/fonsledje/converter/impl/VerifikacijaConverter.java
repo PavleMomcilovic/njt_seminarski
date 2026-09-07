@@ -29,9 +29,11 @@ public class VerifikacijaConverter implements Converter<VerifikacijaDto, Verifik
         predmet.setIdPredmeta(dto.getIdPredmeta());
         v.setPredmet(predmet);
 
-        Profesor profesor = new Profesor();
-        profesor.setIdOsobe(dto.getIdProfesora());
-        v.setProfesor(profesor);
+        if (dto.getIdProfesora() != null) {
+            Profesor profesor = new Profesor();
+            profesor.setIdOsobe(dto.getIdProfesora());
+            v.setProfesor(profesor);
+        }
 
         return v;
     }

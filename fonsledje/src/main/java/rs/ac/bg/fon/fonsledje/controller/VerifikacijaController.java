@@ -54,8 +54,9 @@ public class VerifikacijaController {
     @PutMapping("/{idStudenta}/{idPredmeta}")
     @PreAuthorize("hasRole('PROFESOR')")
     public ResponseEntity<Response> upisiOcenu(@PathVariable Long idStudenta, @PathVariable Long idPredmeta,
-                                                @RequestBody VerifikacijaDto dto) {
-        VerifikacijaDto updated = verifikacijaService.upisiOcenu(idStudenta, idPredmeta, dto);
+                                                @RequestBody VerifikacijaDto dto,
+                                                @AuthenticationPrincipal OsobaPrincipal principal) {
+        VerifikacijaDto updated = verifikacijaService.upisiOcenu(idStudenta, idPredmeta, dto, principal.getIdOsobe());
         return ResponseEntity.ok(
                 HttpResponse.getResponseWithData("Успешно уписана верификација.", Map.of("value", updated), HttpStatus.OK)
         );

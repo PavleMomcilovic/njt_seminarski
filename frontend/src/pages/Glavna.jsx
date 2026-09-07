@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import Carousel from '../components/Carousel'
 import Overlay from '../components/Overlay'
 import { getVesti, createVest, updateVest, deleteVest } from '../api/vesti'
-import { getPredmeti, createPredmet } from '../api/predmeti'
+import { getPredmeti, createPredmet, prijaviSeZaPredmet, odjaviSeZaPredmet } from '../api/predmeti'
 import { extractErrorMessage } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
+import './Predmeti.css'
 import './Glavna.css'
 
 const TEKST_LIMIT = 220
@@ -95,6 +97,18 @@ export default function Glavna() {
     setFormaPredmet({ ...PRAZAN_PREDMET })
   }
 
+  async function promeniPredavanje(predmet, vecPredaje) {
+    setGreska('')
+    try {
+      const azuriran = vecPredaje
+        ? await odjaviSeZaPredmet(predmet.idPredmeta)
+        : await prijaviSeZaPredmet(predmet.idPredmeta)
+      setPredmeti((prev) => prev.map((p) => (p.idPredmeta === predmet.idPredmeta ? azuriran : p)))
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
+  }
+
   async function sacuvajPredmet(e) {
     e.preventDefault()
     setCuva(true)
@@ -132,7 +146,6 @@ export default function Glavna() {
           <Carousel>
             {vesti.map((vest) => {
               const predugacka = vest.tekst.length > TEKST_LIMIT
-              const svoja = jeProfesor && vest.idProfesora === osoba.idOsobe
               return (
                 <div className="kartica vest-kartica" key={`${vest.idProfesora}-${vest.idVesti}`}>
                   <div className="kartica-naslov">{vest.naziv}</div>
@@ -145,7 +158,7 @@ export default function Glavna() {
                       Прочитај више...
                     </button>
                   )}
-                  {svoja && (
+                  {jeProfesor && (
                     <div className="vest-akcije">
                       <button type="button" className="vest-izmeni" onClick={() => otvoriIzmenuVesti(vest)}>
                         Измени
@@ -175,18 +188,35 @@ export default function Glavna() {
           <p className="glavna-prazno">Тренутно нема предмета.</p>
         ) : (
           <Carousel>
-            {predmeti.map((predmet) => (
-              <div
-                className="kartica predmet-kartica"
-                key={predmet.idPredmeta}
-                onClick={() => navigate(`/predmeti/${predmet.idPredmeta}`)}
-              >
-                <div className="kartica-naslov">{predmet.naziv}</div>
-                <div className="kartica-datum">
-                  {predmet.godina}. година, {predmet.semestar}. семестар
+            {predmeti.map((predmet) => {
+              const vecPredaje = predmet.idProfesori?.includes(osoba?.idOsobe)
+              return (
+                <div
+                  className="kartica predmet-kartica"
+                  key={predmet.idPredmeta}
+                  onClick={() => navigate(`/predmeti/${predmet.idPredmeta}`)}
+                >
+                  <div className="kartica-naslov">{predmet.naziv}</div>
+                  <div className="kartica-datum">
+                    {predmet.godina}. година, {predmet.semestar}. семестар
+                  </div>
+                  {jeProfesor && (
+                    <button
+                      type="button"
+                      className={`predmet-predaje-toggle na-kartici ${vecPredaje ? 'predaje' : 'ne-predaje'}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        promeniPredavanje(predmet, vecPredaje)
+                      }}
+                      title={vecPredaje ? 'Предајете овај предмет' : 'Не предајете овај предмет'}
+                      aria-label={vecPredaje ? 'Одјавите се са предавања предмета' : 'Пријавите се да предајете предмет'}
+                    >
+                      {vecPredaje ? <FaCheckCircle size={18} /> : <FaTimesCircle size={18} />}
+                    </button>
+                  )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </Carousel>
         )}
       </section>

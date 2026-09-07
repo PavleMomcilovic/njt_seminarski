@@ -18,6 +18,7 @@
 }
 
 .predmet-kartica {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 20px;
@@ -27,6 +28,10 @@
 
 .predmet-kartica:hover {
   background: var(--accent-bg);
+}
+
+.predmet-kartica:hover:has(.predmet-predaje-toggle:hover) {
+  background: var(--bg);
 }
 
 .predmet-naziv {
@@ -96,4 +101,35 @@
 
 .predmet-obrisi {
   color: #b91c1c;
+}
+
+.predmet-predaje-toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 50%;
+  background: transparent !important;
+  cursor: pointer;
+}
+
+.predmet-predaje-toggle:hover {
+  background: var(--border) !important;
+}
+
+.predmet-predaje-toggle.predaje {
+  color: #16a34a !important;
+}
+
+.predmet-predaje-toggle.ne-predaje {
+  color: #dc2626 !important;
+}
+
+.predmet-predaje-toggle.na-kartici {
+  position: absolute;
+  top: 12px;
+  right: 12px;
 }

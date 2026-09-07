@@ -1,6 +1,5 @@
 package rs.ac.bg.fon.fonsledje.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.fonsledje.converter.impl.VestConverter;
@@ -60,9 +59,6 @@ public class VestServiceImpl implements VestService {
     public VestDto update(VestId id, VestDto dto, Long currentUserId) {
         Vest vest = vestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Вест није пронађена."));
-        if (!id.getIdProfesora().equals(currentUserId)) {
-            throw new AccessDeniedException("Вест можете изменити само ако сте њен аутор.");
-        }
 
         if (dto.getNaziv() != null && !dto.getNaziv().isBlank()) {
             vest.setNaziv(dto.getNaziv());

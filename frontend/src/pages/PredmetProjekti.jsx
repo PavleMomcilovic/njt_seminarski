@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import Overlay from '../components/Overlay'
-import { getPredmetById, updatePredmet, deletePredmet } from '../api/predmeti'
+import { getPredmetById, updatePredmet, deletePredmet, prijaviSeZaPredmet, odjaviSeZaPredmet } from '../api/predmeti'
 import { getProjektiByPredmet } from '../api/projekti'
 import { getVerifikacijeZaStudenta } from '../api/verifikacije'
 import { extractErrorMessage } from '../api/auth'
@@ -23,6 +24,7 @@ export default function PredmetProjekti() {
   const [pretraga, setPretraga] = useState('')
 
   const jeProfesor = osoba?.tip === 'PROFESOR'
+  const vecPredaje = predmet?.idProfesori?.includes(osoba?.idOsobe)
 
   const filtriraniProjekti = useMemo(
     () => projekti.filter((p) => odgovaraPretrazi(p.naziv, pretraga)),
@@ -50,6 +52,18 @@ export default function PredmetProjekti() {
       godina: predmet.godina,
       semestar: predmet.semestar,
     })
+  }
+
+  async function promeniPredavanje() {
+    setGreska('')
+    try {
+      const azuriran = vecPredaje
+        ? await odjaviSeZaPredmet(predmet.idPredmeta)
+        : await prijaviSeZaPredmet(predmet.idPredmeta)
+      setPredmet(azuriran)
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
   }
 
   async function obrisiPredmet() {
@@ -89,6 +103,15 @@ export default function PredmetProjekti() {
         <h1>{predmet ? predmet.naziv : 'Предмет'}</h1>
         {jeProfesor && predmet && (
           <div className="predmet-akcije">
+            <button
+              type="button"
+              className={`predmet-predaje-toggle ${vecPredaje ? 'predaje' : 'ne-predaje'}`}
+              onClick={promeniPredavanje}
+              title={vecPredaje ? 'Предајете овај предмет' : 'Не предајете овај предмет'}
+              aria-label={vecPredaje ? 'Одјавите се са предавања предмета' : 'Пријавите се да предајете предмет'}
+            >
+              {vecPredaje ? <FaCheckCircle size={18} /> : <FaTimesCircle size={18} />}
+            </button>
             <button type="button" className="predmet-izmeni" onClick={otvoriIzmenuPredmeta}>
               Измени
             </button>

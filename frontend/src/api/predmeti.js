@@ -23,3 +23,13 @@ export async function updatePredmet(idPredmeta, dto) {
 export async function deletePredmet(idPredmeta) {
   await client.delete(`/predmeti/${idPredmeta}`)
 }
+
+export async function prijaviSeZaPredmet(idPredmeta) {
+  const response = await client.post(`/predmeti/${idPredmeta}/predajem`)
+  return response.data.data.value
+}
+
+export async function odjaviSeZaPredmet(idPredmeta) {
+  const response = await client.delete(`/predmeti/${idPredmeta}/predajem`)
+  return response.data.data.value
+}

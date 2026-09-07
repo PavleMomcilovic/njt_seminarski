@@ -144,7 +144,10 @@ export default function Profil() {
               </thead>
               <tbody>
                 {verifikacije.map((v) => {
-                  const mozeDaVerifikuje = ulogovan?.tip === 'PROFESOR' && v.idProfesora === ulogovan.idOsobe
+                  const predajePredmet = predmeti
+                    .find((p) => p.idPredmeta === v.idPredmeta)
+                    ?.idProfesori?.includes(ulogovan?.idOsobe)
+                  const mozeDaVerifikuje = ulogovan?.tip === 'PROFESOR' && predajePredmet
                   const izmena = izmene[v.idPredmeta] || {}
                   return (
                     <tr key={v.idPredmeta}>

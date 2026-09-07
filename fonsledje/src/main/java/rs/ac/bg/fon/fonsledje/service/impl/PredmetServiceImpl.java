@@ -48,7 +48,6 @@ public class PredmetServiceImpl implements PredmetService {
         predmet.setNaziv(dto.getNaziv());
         predmet.setGodina(dto.getGodina());
         predmet.setSemestar(dto.getSemestar());
-        predmet.setProfesorOdobrio(profesor);
         predmet.getProfesori().add(profesor);
 
         Predmet saved = predmetRepository.save(predmet);
@@ -63,6 +62,19 @@ public class PredmetServiceImpl implements PredmetService {
                 .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesora + " није пронађен."));
 
         predmet.getProfesori().add(profesor);
+
+        Predmet saved = predmetRepository.save(predmet);
+        return predmetConverter.toDto(saved);
+    }
+
+    @Override
+    public PredmetDto odjaviSe(Long idPredmeta, Long idProfesora) {
+        Predmet predmet = predmetRepository.findById(idPredmeta)
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + idPredmeta + " није пронађен."));
+        Profesor profesor = profesorRepository.findById(idProfesora)
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesora + " није пронађен."));
+
+        predmet.getProfesori().remove(profesor);
 
         Predmet saved = predmetRepository.save(predmet);
         return predmetConverter.toDto(saved);

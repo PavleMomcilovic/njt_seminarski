@@ -41,6 +41,6 @@ public class Verifikacija implements Serializable {
     private Predmet predmet;
 
     @ManyToOne
-    @JoinColumn(name = "idProfesora", nullable = false)
+    @JoinColumn(name = "idProfesora")
     private Profesor profesor;
 }

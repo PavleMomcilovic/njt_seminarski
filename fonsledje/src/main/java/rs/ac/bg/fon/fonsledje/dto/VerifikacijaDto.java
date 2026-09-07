@@ -25,6 +25,5 @@ public class VerifikacijaDto {
     @NotNull(message = "Ово поље је обавезно")
     private Long idPredmeta;
 
-    @NotNull(message = "Ово поље је обавезно")
     private Long idProfesora;
 }

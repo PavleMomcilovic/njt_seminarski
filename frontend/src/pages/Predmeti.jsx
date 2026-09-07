@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import Overlay from '../components/Overlay'
-import { getPredmeti, createPredmet } from '../api/predmeti'
+import { getPredmeti, createPredmet, prijaviSeZaPredmet, odjaviSeZaPredmet } from '../api/predmeti'
 import { extractErrorMessage } from '../api/auth'
 import { odgovaraPretrazi } from '../utils/pretraga'
 import './Auth.css'
@@ -33,6 +34,18 @@ export default function Predmeti() {
   function otvoriNoviPredmet() {
     setGreska('')
     setFormaPredmet({ ...PRAZAN_PREDMET })
+  }
+
+  async function promeniPredavanje(predmet, vecPredaje) {
+    setGreska('')
+    try {
+      const azuriran = vecPredaje
+        ? await odjaviSeZaPredmet(predmet.idPredmeta)
+        : await prijaviSeZaPredmet(predmet.idPredmeta)
+      setPredmeti((prev) => prev.map((p) => (p.idPredmeta === predmet.idPredmeta ? azuriran : p)))
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
   }
 
   async function sacuvajPredmet(e) {
@@ -74,22 +87,41 @@ export default function Predmeti() {
         onChange={(e) => setPretraga(e.target.value)}
       />
 
+      {greska && <div className="auth-error">{greska}</div>}
+
       {filtriraniPredmeti.length === 0 ? (
         <p>{predmeti.length === 0 ? 'Тренутно нема предмета.' : 'Нема предмета који одговарају претрази.'}</p>
       ) : (
         <div className="predmeti-grid">
-          {filtriraniPredmeti.map((predmet) => (
-            <div
-              className="predmet-kartica"
-              key={predmet.idPredmeta}
-              onClick={() => navigate(`/predmeti/${predmet.idPredmeta}`)}
-            >
-              <div className="predmet-naziv">{predmet.naziv}</div>
-              <div className="predmet-info">
-                {predmet.godina}. година, {predmet.semestar}. семестар
+          {filtriraniPredmeti.map((predmet) => {
+            const vecPredaje = predmet.idProfesori?.includes(osoba?.idOsobe)
+            return (
+              <div
+                className="predmet-kartica"
+                key={predmet.idPredmeta}
+                onClick={() => navigate(`/predmeti/${predmet.idPredmeta}`)}
+              >
+                <div className="predmet-naziv">{predmet.naziv}</div>
+                <div className="predmet-info">
+                  {predmet.godina}. година, {predmet.semestar}. семестар
+                </div>
+                {jeProfesor && (
+                  <button
+                    type="button"
+                    className={`predmet-predaje-toggle na-kartici ${vecPredaje ? 'predaje' : 'ne-predaje'}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      promeniPredavanje(predmet, vecPredaje)
+                    }}
+                    title={vecPredaje ? 'Предајете овај предмет' : 'Не предајете овај предмет'}
+                    aria-label={vecPredaje ? 'Одјавите се са предавања предмета' : 'Пријавите се да предајете предмет'}
+                  >
+                    {vecPredaje ? <FaCheckCircle size={18} /> : <FaTimesCircle size={18} />}
+                  </button>
+                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 

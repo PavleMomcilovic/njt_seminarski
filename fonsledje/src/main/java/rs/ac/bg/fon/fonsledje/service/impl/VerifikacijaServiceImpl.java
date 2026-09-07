@@ -1,15 +1,18 @@
 package rs.ac.bg.fon.fonsledje.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.fonsledje.converter.impl.VerifikacijaConverter;
 import rs.ac.bg.fon.fonsledje.dto.VerifikacijaDto;
 import rs.ac.bg.fon.fonsledje.entity.Predmet;
+import rs.ac.bg.fon.fonsledje.entity.Profesor;
 import rs.ac.bg.fon.fonsledje.entity.Student;
 import rs.ac.bg.fon.fonsledje.entity.Verifikacija;
 import rs.ac.bg.fon.fonsledje.entity.VerifikacijaId;
 import rs.ac.bg.fon.fonsledje.exception.EntityNotFoundException;
 import rs.ac.bg.fon.fonsledje.repository.PredmetRepository;
+import rs.ac.bg.fon.fonsledje.repository.ProfesorRepository;
 import rs.ac.bg.fon.fonsledje.repository.StudentRepository;
 import rs.ac.bg.fon.fonsledje.repository.VerifikacijaRepository;
 import rs.ac.bg.fon.fonsledje.service.VerifikacijaService;
@@ -25,13 +28,16 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
     private final VerifikacijaRepository verifikacijaRepository;
     private final StudentRepository studentRepository;
     private final PredmetRepository predmetRepository;
+    private final ProfesorRepository profesorRepository;
     private final VerifikacijaConverter verifikacijaConverter;
 
     public VerifikacijaServiceImpl(VerifikacijaRepository verifikacijaRepository, StudentRepository studentRepository,
-                                    PredmetRepository predmetRepository, VerifikacijaConverter verifikacijaConverter) {
+                                    PredmetRepository predmetRepository, ProfesorRepository profesorRepository,
+                                    VerifikacijaConverter verifikacijaConverter) {
         this.verifikacijaRepository = verifikacijaRepository;
         this.studentRepository = studentRepository;
         this.predmetRepository = predmetRepository;
+        this.profesorRepository = profesorRepository;
         this.verifikacijaConverter = verifikacijaConverter;
     }
 
@@ -54,18 +60,26 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
             verifikacija.setStatus(false);
             verifikacija.setStudent(student);
             verifikacija.setPredmet(predmet);
-            verifikacija.setProfesor(predmet.getProfesorOdobrio());
             kreirane.add(verifikacijaRepository.save(verifikacija));
         }
         return kreirane.stream().map(verifikacijaConverter::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public VerifikacijaDto upisiOcenu(Long idStudenta, Long idPredmeta, VerifikacijaDto dto) {
+    public VerifikacijaDto upisiOcenu(Long idStudenta, Long idPredmeta, VerifikacijaDto dto, Long idProfesoraUlogovanog) {
         VerifikacijaId id = new VerifikacijaId(idStudenta, idPredmeta);
         Verifikacija verifikacija = verifikacijaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Студент није пријављен на предмет, верификација не постоји."));
+
+        boolean predajePredmet = verifikacija.getPredmet().getProfesori().stream()
+                .anyMatch(p -> p.getIdOsobe().equals(idProfesoraUlogovanog));
+        if (!predajePredmet) {
+            throw new AccessDeniedException("Можете оцењивати само студенте на предметима које предајете.");
+        }
+        Profesor profesor = profesorRepository.findById(idProfesoraUlogovanog)
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesoraUlogovanog + " није пронађен."));
+        verifikacija.setProfesor(profesor);
 
         if (dto.getStatus() != null) {
             verifikacija.setStatus(dto.getStatus());

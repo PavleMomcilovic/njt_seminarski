@@ -7,7 +7,7 @@ import java.util.List;
 public interface VerifikacijaService {
     List<VerifikacijaDto> potvrdiPredmete(Long idStudenta, List<Long> idPredmeta);
 
-    VerifikacijaDto upisiOcenu(Long idStudenta, Long idPredmeta, VerifikacijaDto dto);
+    VerifikacijaDto upisiOcenu(Long idStudenta, Long idPredmeta, VerifikacijaDto dto, Long idProfesoraUlogovanog);
 
     List<VerifikacijaDto> findByStudent(Long idStudenta);
 

@@ -24,8 +24,5 @@ public class PredmetDto {
     @NotNull(message = "Ово поље је обавезно")
     private Long semestar;
 
-    @NotNull(message = "Ово поље је обавезно")
-    private Long idProfesora;
-
     private List<Long> idProfesori;
 }

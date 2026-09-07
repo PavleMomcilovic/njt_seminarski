@@ -9,6 +9,8 @@ public interface PredmetService {
 
     PredmetDto prijaviSe(Long idPredmeta, Long idProfesora);
 
+    PredmetDto odjaviSe(Long idPredmeta, Long idProfesora);
+
     PredmetDto update(Long id, PredmetDto dto);
 
     void delete(Long id);

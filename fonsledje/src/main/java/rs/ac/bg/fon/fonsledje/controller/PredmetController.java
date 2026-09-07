@@ -66,6 +66,15 @@ public class PredmetController {
         );
     }
 
+    @DeleteMapping("/{id}/predajem")
+    @PreAuthorize("hasRole('PROFESOR')")
+    public ResponseEntity<Response> odjaviSe(@PathVariable Long id, @AuthenticationPrincipal OsobaPrincipal principal) {
+        PredmetDto updated = predmetService.odjaviSe(id, principal.getIdOsobe());
+        return ResponseEntity.ok(
+                HttpResponse.getResponseWithData("Успешно одјављени са предавања предмета.", Map.of("value", updated), HttpStatus.OK)
+        );
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESOR')")
     public ResponseEntity<Response> update(@PathVariable Long id, @RequestBody PredmetDto dto) {
