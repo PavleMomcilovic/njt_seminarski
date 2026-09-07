@@ -1,0 +1,57 @@
+.glavna-sekcija {
+  margin-bottom: 40px;
+}
+
+.glavna-sekcija h2 {
+  font-size: 20px;
+  margin: 0 0 16px;
+  color: var(--text-h);
+}
+
+.glavna-prazno {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.kartica {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--bg);
+}
+
+.predmet-kartica {
+  cursor: pointer;
+}
+
+.predmet-kartica:hover {
+  background: var(--accent-bg);
+}
+
+.kartica-naslov {
+  font-weight: 600;
+  color: var(--text-h);
+  margin-bottom: 4px;
+}
+
+.kartica-datum {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.kartica-tekst {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.procitaj-vise {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+}

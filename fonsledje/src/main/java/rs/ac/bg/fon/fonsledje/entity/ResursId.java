@@ -15,7 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class ResursId implements Serializable {
-    @Column(name = "idProjekta")
     private Long idProjekta;
 
     @Column(name = "idResursa")

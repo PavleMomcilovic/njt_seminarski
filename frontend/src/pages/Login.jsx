@@ -19,7 +19,7 @@ export default function Login() {
     try {
       const osoba = await login(email, sifra)
       setOsoba(osoba)
-      navigate('/pocetna')
+      navigate('/glavna')
     } catch (err) {
       setGreska(extractErrorMessage(err))
     } finally {

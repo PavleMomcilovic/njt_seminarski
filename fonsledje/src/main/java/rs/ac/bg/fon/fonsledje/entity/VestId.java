@@ -15,7 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class VestId implements Serializable {
-    @Column(name = "idProfesora")
     private Long idProfesora;
 
     @Column(name = "idVesti")

@@ -15,5 +15,7 @@ public interface ProjekatService {
 
     List<ProjekatDto> findAll();
 
+    List<ProjekatDto> findByPredmet(Long idPredmeta);
+
     List<ProjekatDto> search(String naziv);
 }

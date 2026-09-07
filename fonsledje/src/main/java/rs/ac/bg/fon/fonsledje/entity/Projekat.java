@@ -26,7 +26,7 @@ public class Projekat implements Serializable {
     private String naziv;
 
     @NotBlank(message = "Ovo polje je obavezno")
-    @Column(name = "opis", nullable = false)
+    @Column(name = "opis", nullable = false, columnDefinition = "TEXT")
     private String opis;
 
     @ManyToOne

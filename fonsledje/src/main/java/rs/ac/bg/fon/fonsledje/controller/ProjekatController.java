@@ -32,6 +32,14 @@ public class ProjekatController {
         );
     }
 
+    @GetMapping("/predmet/{idPredmeta}")
+    public ResponseEntity<Response> getByPredmet(@PathVariable Long idPredmeta) {
+        List<ProjekatDto> projekti = projekatService.findByPredmet(idPredmeta);
+        return ResponseEntity.ok(
+                HttpResponse.getResponseWithData("Uspešno pronađeni projekti.", Map.of("values", projekti), HttpStatus.OK)
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Response> getById(@PathVariable Long id) {
         ProjekatDto projekat = projekatService.findById(id);

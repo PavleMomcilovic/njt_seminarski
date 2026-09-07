@@ -1,0 +1,29 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getOsobe } from '../api/osobe'
+import './Zajednica.css'
+
+export default function Zajednica() {
+  const navigate = useNavigate()
+  const [osobe, setOsobe] = useState([])
+
+  useEffect(() => {
+    getOsobe().then(setOsobe).catch(() => {})
+  }, [])
+
+  return (
+    <div>
+      <h1>Zajednica</h1>
+      <div className="osobe-lista">
+        {osobe.map((osoba) => (
+          <div className="osoba-kartica" key={osoba.idOsobe} onClick={() => navigate(`/osoba/${osoba.idOsobe}`)}>
+            <div className="osoba-ime">
+              {osoba.ime} {osoba.prezime}
+            </div>
+            <div className="osoba-tip">{osoba.tip === 'STUDENT' ? 'Student' : 'Profesor'}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

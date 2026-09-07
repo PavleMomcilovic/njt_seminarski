@@ -1,0 +1,14 @@
+.novi-projekat {
+  max-width: 560px;
+}
+
+.novi-projekat textarea {
+  padding: 8px 10px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-h);
+  resize: vertical;
+}

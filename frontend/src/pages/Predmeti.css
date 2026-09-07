@@ -1,0 +1,45 @@
+.predmeti-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.predmet-kartica {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  background: var(--bg);
+}
+
+.predmet-kartica:hover {
+  background: var(--accent-bg);
+}
+
+.predmet-naziv {
+  font-weight: 600;
+  color: var(--text-h);
+  margin-bottom: 6px;
+  font-size: 17px;
+}
+
+.predmet-info {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.dodaj-projekat-dugme {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dodaj-projekat-dugme:hover {
+  opacity: 0.9;
+}

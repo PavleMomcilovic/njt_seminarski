@@ -124,6 +124,14 @@ public class ProjekatServiceImpl implements ProjekatService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<ProjekatDto> findByPredmet(Long idPredmeta) {
+        return projekatRepository.findByPredmet_IdPredmeta(idPredmeta).stream()
+                .map(projekatConverter::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ProjekatDto> search(String naziv) {
         return projekatRepository.findByNazivContainingIgnoreCase(naziv == null ? "" : naziv).stream()
                 .map(projekatConverter::toDto)

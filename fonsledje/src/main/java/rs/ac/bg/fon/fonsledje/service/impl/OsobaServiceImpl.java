@@ -41,6 +41,7 @@ public class OsobaServiceImpl implements OsobaService {
 
     @Override
     public OsobaDto register(OsobaDto dto) {
+        dto.setEmail(dto.getEmail() == null ? null : dto.getEmail().trim().toLowerCase());
         if (dto.getSifra() == null || dto.getSifra().length() < 9) {
             throw new ValidationException("Lozinka mora imati najmanje 9 karaktera.");
         }
@@ -118,11 +119,12 @@ public class OsobaServiceImpl implements OsobaService {
                 .orElseThrow(() -> new EntityNotFoundException("Osoba sa ID " + id + " nije pronađena."));
 
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
-            Osoba postojiSaEmailom = osobaRepository.findByEmail(dto.getEmail());
+            String noviEmail = dto.getEmail().trim().toLowerCase();
+            Osoba postojiSaEmailom = osobaRepository.findByEmail(noviEmail);
             if (postojiSaEmailom != null && !postojiSaEmailom.getIdOsobe().equals(id)) {
-                throw new ValidationException("Nalog sa email-om '" + dto.getEmail() + "' već postoji.");
+                throw new ValidationException("Nalog sa email-om '" + noviEmail + "' već postoji.");
             }
-            postojeca.setEmail(dto.getEmail());
+            postojeca.setEmail(noviEmail);
         }
         if (dto.getIme() != null && !dto.getIme().isBlank()) {
             postojeca.setIme(dto.getIme());

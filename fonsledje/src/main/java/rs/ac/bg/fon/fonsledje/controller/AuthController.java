@@ -39,16 +39,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest,
                                            HttpServletRequest request, HttpServletResponse response) {
+        String email = loginRequest.getEmail() == null ? null : loginRequest.getEmail().trim().toLowerCase();
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getSifra()));
+                    new UsernamePasswordAuthenticationToken(email, loginRequest.getSifra()));
 
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
             securityContextRepository.saveContext(context, request, response);
 
-            OsobaDto osoba = osobaService.findByEmail(loginRequest.getEmail());
+            OsobaDto osoba = osobaService.findByEmail(email);
             return ResponseEntity.ok(
                     HttpResponse.getResponseWithData("Uspešna prijava.", Map.of("value", osoba), HttpStatus.OK)
             );

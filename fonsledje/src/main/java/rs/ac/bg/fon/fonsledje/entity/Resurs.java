@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 
@@ -28,11 +30,11 @@ public class Resurs implements Serializable {
     private String naziv;
 
     @NotBlank(message = "Ovo polje je obavezno")
-    @Column(name = "opis", nullable = false)
+    @Column(name = "opis", nullable = false, columnDefinition = "TEXT")
     private String opis;
 
     @NotNull(message = "Ovo polje je obavezno")
-    @Lob
+    @JdbcTypeCode(SqlTypes.VARBINARY)
     @Column(name = "sadrzaj", nullable = false)
     private byte[] sadrzaj;
 

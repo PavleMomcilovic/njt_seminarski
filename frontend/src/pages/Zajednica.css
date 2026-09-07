@@ -1,0 +1,28 @@
+.osobe-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.osoba-kartica {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: var(--bg);
+}
+
+.osoba-kartica:hover {
+  background: var(--accent-bg);
+}
+
+.osoba-ime {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.osoba-tip {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 4px;
+}

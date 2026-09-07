@@ -8,5 +8,7 @@ import java.util.List;
 public interface ProjekatRepository extends JpaRepository<Projekat, Long> {
     List<Projekat> findByStudent_IdOsobe(Long idStudenta);
 
+    List<Projekat> findByPredmet_IdPredmeta(Long idPredmeta);
+
     List<Projekat> findByNazivContainingIgnoreCase(String naziv);
 }

@@ -25,7 +25,7 @@ public class Vest implements Serializable {
     private String naziv;
 
     @NotBlank(message = "Ovo polje je obavezno")
-    @Column(name = "tekst", nullable = false)
+    @Column(name = "tekst", nullable = false, columnDefinition = "TEXT")
     private String tekst;
 
     @NotNull(message = "Ovo polje je obavezno")

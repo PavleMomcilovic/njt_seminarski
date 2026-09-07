@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.fonsledje.config;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,6 +37,19 @@ public class GlobalExceptionHandler {
         Map<String, String> fieldErrors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             fieldErrors.put(error.getField(), error.getDefaultMessage());
+        }
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", "Neispravni podaci.");
+        body.put("errors", fieldErrors);
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String polje = violation.getPropertyPath().toString();
+            fieldErrors.put(polje, violation.getMessage());
         }
         Map<String, Object> body = new HashMap<>();
         body.put("message", "Neispravni podaci.");
