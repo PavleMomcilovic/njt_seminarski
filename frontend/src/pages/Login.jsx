@@ -3,14 +3,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { login, extractErrorMessage } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export default function Login() {
   const navigate = useNavigate()
   const { setOsoba } = useAuth()
   const [email, setEmail] = useState('')
   const [sifra, setSifra] = useState('')
+  const [prikazSifre, setPrikazSifre] = useState(false)
   const [greska, setGreska] = useState('')
   const [ucitava, setUcitava] = useState(false)
+
+  const promeniVidljivostSifre = () => {
+    setPrikazSifre((prev) => !prev)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -41,7 +47,24 @@ export default function Login() {
 
         <div className="auth-field">
           <label htmlFor="sifra">Лозинка</label>
-          <input id="sifra" type="password" value={sifra} onChange={(e) => setSifra(e.target.value)} required />
+          <div className="input-wrapper">
+            <input
+              id="sifra"
+              type={prikazSifre ? "text" : "password"}
+              value={sifra}
+              onChange={(e) => setSifra(e.target.value)}
+              required
+            />
+
+            <button
+             type="button"
+             onClick={promeniVidljivostSifre}
+             className="icon-button"
+             aria-label={prikazSifre ? "Сакриј шифру" : "Прикажи шифру"}
+            >
+              {prikazSifre ? <FaEyeSlash size={20}/> : <FaEye size={20}/>}
+            </button>
+          </div>
         </div>
 
         <button type="submit" className="auth-submit" disabled={ucitava}>

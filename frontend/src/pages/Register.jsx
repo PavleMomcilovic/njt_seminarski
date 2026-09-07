@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { register, getKatedre, getZvanja, extractErrorMessage } from '../api/auth'
 import './Auth.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const STATUSI = ['AKTIVAN', 'APSOLVENT', 'NEAKTIVAN']
 const STATUS_NAZIVI = { AKTIVAN: 'Активан', APSOLVENT: 'Апсолвент', NEAKTIVAN: 'Неактиван' }
@@ -11,6 +12,7 @@ export default function Register() {
   const [tip, setTip] = useState('STUDENT')
   const [email, setEmail] = useState('')
   const [sifra, setSifra] = useState('')
+  const [prikazSifre, setPrikazSifre] = useState(false)
   const [ime, setIme] = useState('')
   const [prezime, setPrezime] = useState('')
   const [brojIndeksa, setBrojIndeksa] = useState('')
@@ -26,6 +28,10 @@ export default function Register() {
     getKatedre().then(setKatedre).catch(() => {})
     getZvanja().then(setZvanja).catch(() => {})
   }, [])
+
+  const promeniVidljivostSifre = () => {
+    setPrikazSifre((prev) => !prev)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -72,8 +78,23 @@ export default function Register() {
 
         <div className="auth-field">
           <label htmlFor="sifra">Лозинка</label>
-          <input id="sifra" type="password" value={sifra} onChange={(e) => setSifra(e.target.value)}
-                 minLength={9} required />
+          <div className="input-wrapper">
+            <input 
+             id="sifra" 
+             type={prikazSifre ? "text" : "password"} 
+             value={sifra} 
+             onChange={(e) => setSifra(e.target.value)}
+             minLength={9}
+             required />
+            <button
+             type="button"
+             onClick={promeniVidljivostSifre}
+             className="icon-button"
+             aria-label={prikazSifre ? "Сакриј шифру" : "Прикажи шифру"}
+            >
+              {prikazSifre ? <FaEyeSlash size={20}/> : <FaEye size={20}/>}
+            </button>
+          </div>
         </div>
 
         <div className="auth-field">
@@ -91,7 +112,8 @@ export default function Register() {
             <div className="auth-field">
               <label htmlFor="brojIndeksa">Број индекса</label>
               <input id="brojIndeksa" type="text" value={brojIndeksa}
-                     onChange={(e) => setBrojIndeksa(e.target.value)} required />
+                     onChange={(e) => setBrojIndeksa(e.target.value)} 
+                     placeholder="У формату: 2020/0410" required />
             </div>
             <div className="auth-field">
               <label htmlFor="status">Статус</label>
