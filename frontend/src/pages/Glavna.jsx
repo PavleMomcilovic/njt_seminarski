@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import Carousel from '../components/Carousel'
 import Overlay from '../components/Overlay'
+import Potvrda from '../components/Potvrda'
 import { getVesti, createVest, updateVest, deleteVest } from '../api/vesti'
 import { getPredmeti, createPredmet, prijaviSeZaPredmet, odjaviSeZaPredmet } from '../api/predmeti'
 import { extractErrorMessage } from '../api/auth'
@@ -30,6 +31,7 @@ export default function Glavna() {
   const [formaPredmet, setFormaPredmet] = useState(null)
   const [greska, setGreska] = useState('')
   const [cuva, setCuva] = useState(false)
+  const [potvrda, setPotvrda] = useState(null)
 
   const jeProfesor = osoba?.tip === 'PROFESOR'
 
@@ -54,8 +56,11 @@ export default function Glavna() {
     })
   }
 
+  function trazipotvrduBrisanjaVesti(vest) {
+    setPotvrda({ poruka: 'Обрисати ову вест?', akcija: () => obrisiVest(vest) })
+  }
+
   async function obrisiVest(vest) {
-    if (!window.confirm('Обрисати ову вест?')) return
     setGreska('')
     try {
       await deleteVest(vest.idProfesora, vest.idVesti)
@@ -163,7 +168,7 @@ export default function Glavna() {
                       <button type="button" className="vest-izmeni" onClick={() => otvoriIzmenuVesti(vest)}>
                         Измени
                       </button>
-                      <button type="button" className="vest-obrisi" onClick={() => obrisiVest(vest)}>
+                      <button type="button" className="vest-obrisi" onClick={() => trazipotvrduBrisanjaVesti(vest)}>
                         Обриши
                       </button>
                     </div>
@@ -316,6 +321,17 @@ export default function Glavna() {
             </button>
           </form>
         </Overlay>
+      )}
+
+      {potvrda && (
+        <Potvrda
+          poruka={potvrda.poruka}
+          onPotvrdi={() => {
+            potvrda.akcija()
+            setPotvrda(null)
+          }}
+          onOdustani={() => setPotvrda(null)}
+        />
       )}
     </div>
   )

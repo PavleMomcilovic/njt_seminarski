@@ -96,6 +96,35 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
     }
 
     @Override
+    public VerifikacijaDto verifikujStudenta(Long idStudenta, Long idPredmeta, Long idProfesoraUlogovanog) {
+        Predmet predmet = predmetRepository.findById(idPredmeta)
+                .orElseThrow(() -> new EntityNotFoundException("Предмет са ИД " + idPredmeta + " није пронађен."));
+        boolean predajePredmet = predmet.getProfesori().stream()
+                .anyMatch(p -> p.getIdOsobe().equals(idProfesoraUlogovanog));
+        if (!predajePredmet) {
+            throw new AccessDeniedException("Можете верификовати студенте само на предметима које предајете.");
+        }
+        Student student = studentRepository.findById(idStudenta)
+                .orElseThrow(() -> new EntityNotFoundException("Студент са ИД " + idStudenta + " није пронађен."));
+        Profesor profesor = profesorRepository.findById(idProfesoraUlogovanog)
+                .orElseThrow(() -> new EntityNotFoundException("Професор са ИД " + idProfesoraUlogovanog + " није пронађен."));
+
+        VerifikacijaId id = new VerifikacijaId(idStudenta, idPredmeta);
+        Verifikacija verifikacija = verifikacijaRepository.findById(id).orElse(null);
+        if (verifikacija == null) {
+            verifikacija = new Verifikacija();
+            verifikacija.setId(id);
+            verifikacija.setStudent(student);
+            verifikacija.setPredmet(predmet);
+        }
+        verifikacija.setStatus(true);
+        verifikacija.setProfesor(profesor);
+
+        Verifikacija saved = verifikacijaRepository.save(verifikacija);
+        return verifikacijaConverter.toDto(saved);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<VerifikacijaDto> findByStudent(Long idStudenta) {
         return verifikacijaRepository.findByStudent_IdOsobe(idStudenta).stream()

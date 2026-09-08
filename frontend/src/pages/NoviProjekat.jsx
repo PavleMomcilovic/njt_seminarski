@@ -30,6 +30,21 @@ export default function NoviProjekat() {
     return tipoviResursa.find((t) => t.naziv.toLowerCase().includes(kljucnaRec))?.idTipResursa
   }
 
+  function izaberiZipFajl(e) {
+    setZipFajl(e.target.files[0] || null)
+    e.target.value = ''
+  }
+
+  function dodajTekstualneFajlove(e) {
+    const noviFajlovi = Array.from(e.target.files)
+    setTekstualniFajlovi((prev) => [...prev, ...noviFajlovi])
+    e.target.value = ''
+  }
+
+  function ukloniTekstualniFajl(indeks) {
+    setTekstualniFajlovi((prev) => prev.filter((_, i) => i !== indeks))
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setGreska('')
@@ -92,25 +107,28 @@ export default function NoviProjekat() {
 
         <div className="auth-field">
           <label htmlFor="zip">Зип датотека</label>
-          <input
-            id="zip"
-            type="file"
-            accept=".zip"
-            onChange={(e) => setZipFajl(e.target.files[0] || null)}
-            required
-          />
+          <input id="zip" type="file" accept=".zip,.rar,.7z,.tar,.gz" onChange={izaberiZipFajl} />
+          {zipFajl && (
+            <div className="izabrana-datoteka">
+              <span>{zipFajl.name}</span>
+              <button type="button" className="datoteka-obrisi" onClick={() => setZipFajl(null)}>
+                Обриши
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="auth-field">
           <label htmlFor="tekst">Текстуалне датотеке</label>
-          <input
-            id="tekst"
-            type="file"
-            accept=".txt"
-            multiple
-            onChange={(e) => setTekstualniFajlovi(Array.from(e.target.files))}
-            required
-          />
+          <input id="tekst" type="file" accept=".txt,.pdf,.doc,.docx" multiple onChange={dodajTekstualneFajlove} />
+          {tekstualniFajlovi.map((fajl, indeks) => (
+            <div className="izabrana-datoteka" key={`${fajl.name}-${indeks}`}>
+              <span>{fajl.name}</span>
+              <button type="button" className="datoteka-obrisi" onClick={() => ukloniTekstualniFajl(indeks)}>
+                Обриши
+              </button>
+            </div>
+          ))}
         </div>
 
         <button type="submit" className="auth-submit" disabled={ucitava}>

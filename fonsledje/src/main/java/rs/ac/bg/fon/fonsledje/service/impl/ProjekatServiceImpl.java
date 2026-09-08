@@ -101,7 +101,9 @@ public class ProjekatServiceImpl implements ProjekatService {
 
     private void proveriVlasnistvo(Projekat projekat, Long currentUserId, boolean currentIsProfesor) {
         boolean vlasnik = projekat.getStudent() != null && projekat.getStudent().getIdOsobe().equals(currentUserId);
-        if (!vlasnik && !currentIsProfesor) {
+        boolean predajePredmet = currentIsProfesor && projekat.getPredmet() != null
+                && projekat.getPredmet().getProfesori().stream().anyMatch(p -> p.getIdOsobe().equals(currentUserId));
+        if (!vlasnik && !predajePredmet) {
             throw new AccessDeniedException("Немате дозволу да мењате овај пројекат.");
         }
     }

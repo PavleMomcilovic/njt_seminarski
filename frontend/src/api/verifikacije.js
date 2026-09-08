@@ -9,3 +9,8 @@ export async function upisiOcenu(idStudenta, idPredmeta, dto) {
   const response = await client.put(`/verifikacije/${idStudenta}/${idPredmeta}`, dto)
   return response.data.data.value
 }
+
+export async function verifikujStudenta(idStudenta, idPredmeta) {
+  const response = await client.post(`/verifikacije/${idStudenta}/${idPredmeta}/verifikuj`)
+  return response.data.data.value
+}

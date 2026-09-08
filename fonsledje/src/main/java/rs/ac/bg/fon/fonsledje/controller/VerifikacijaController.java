@@ -61,4 +61,14 @@ public class VerifikacijaController {
                 HttpResponse.getResponseWithData("Успешно уписана верификација.", Map.of("value", updated), HttpStatus.OK)
         );
     }
+
+    @PostMapping("/{idStudenta}/{idPredmeta}/verifikuj")
+    @PreAuthorize("hasRole('PROFESOR')")
+    public ResponseEntity<Response> verifikujStudenta(@PathVariable Long idStudenta, @PathVariable Long idPredmeta,
+                                                        @AuthenticationPrincipal OsobaPrincipal principal) {
+        VerifikacijaDto updated = verifikacijaService.verifikujStudenta(idStudenta, idPredmeta, principal.getIdOsobe());
+        return ResponseEntity.ok(
+                HttpResponse.getResponseWithData("Студент успешно верификован за предмет.", Map.of("value", updated), HttpStatus.OK)
+        );
+    }
 }

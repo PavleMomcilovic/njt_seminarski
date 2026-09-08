@@ -9,6 +9,8 @@ public interface VerifikacijaService {
 
     VerifikacijaDto upisiOcenu(Long idStudenta, Long idPredmeta, VerifikacijaDto dto, Long idProfesoraUlogovanog);
 
+    VerifikacijaDto verifikujStudenta(Long idStudenta, Long idPredmeta, Long idProfesoraUlogovanog);
+
     List<VerifikacijaDto> findByStudent(Long idStudenta);
 
     List<VerifikacijaDto> findAll();

@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import Overlay from '../components/Overlay'
+import Potvrda from '../components/Potvrda'
 import { getPredmetById, updatePredmet, deletePredmet, prijaviSeZaPredmet, odjaviSeZaPredmet } from '../api/predmeti'
-import { getProjektiByPredmet } from '../api/projekti'
+import { getProjektiByPredmet, deleteProjekat } from '../api/projekti'
+import { getOsobe } from '../api/osobe'
 import { getVerifikacijeZaStudenta } from '../api/verifikacije'
 import { extractErrorMessage } from '../api/auth'
 import { odgovaraPretrazi } from '../utils/pretraga'
@@ -17,11 +19,13 @@ export default function PredmetProjekti() {
   const { osoba } = useAuth()
   const [predmet, setPredmet] = useState(null)
   const [projekti, setProjekti] = useState([])
+  const [osobe, setOsobe] = useState([])
   const [verifikovan, setVerifikovan] = useState(false)
   const [formaPredmet, setFormaPredmet] = useState(null)
   const [greska, setGreska] = useState('')
   const [cuva, setCuva] = useState(false)
   const [pretraga, setPretraga] = useState('')
+  const [potvrda, setPotvrda] = useState(null)
 
   const jeProfesor = osoba?.tip === 'PROFESOR'
   const vecPredaje = predmet?.idProfesori?.includes(osoba?.idOsobe)
@@ -34,6 +38,7 @@ export default function PredmetProjekti() {
   useEffect(() => {
     getPredmetById(id).then(setPredmet).catch(() => {})
     getProjektiByPredmet(id).then(setProjekti).catch(() => {})
+    getOsobe().then(setOsobe).catch(() => {})
 
     if (osoba?.tip === 'STUDENT') {
       getVerifikacijeZaStudenta(osoba.idOsobe)
@@ -43,6 +48,25 @@ export default function PredmetProjekti() {
         .catch(() => {})
     }
   }, [id, osoba])
+
+  function nazivAutora(idStudenta) {
+    const autor = osobe.find((o) => o.idOsobe === idStudenta)
+    return autor ? `${autor.ime} ${autor.prezime}` : `студент #${idStudenta}`
+  }
+
+  function trazipotvrduBrisanjaProjekta(projekat) {
+    setPotvrda({ poruka: 'Обрисати овај пројекат?', akcija: () => obrisiProjekat(projekat) })
+  }
+
+  async function obrisiProjekat(projekat) {
+    setGreska('')
+    try {
+      await deleteProjekat(projekat.idProjekta)
+      setProjekti((prev) => prev.filter((p) => p.idProjekta !== projekat.idProjekta))
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
+  }
 
   function otvoriIzmenuPredmeta() {
     setGreska('')
@@ -66,8 +90,11 @@ export default function PredmetProjekti() {
     }
   }
 
+  function trazipotvrduBrisanjaPredmeta() {
+    setPotvrda({ poruka: 'Обрисати овај предмет?', akcija: obrisiPredmet })
+  }
+
   async function obrisiPredmet() {
-    if (!window.confirm('Обрисати овај предмет?')) return
     setGreska('')
     try {
       await deletePredmet(predmet.idPredmeta)
@@ -115,7 +142,7 @@ export default function PredmetProjekti() {
             <button type="button" className="predmet-izmeni" onClick={otvoriIzmenuPredmeta}>
               Измени
             </button>
-            <button type="button" className="predmet-obrisi" onClick={obrisiPredmet}>
+            <button type="button" className="predmet-obrisi" onClick={trazipotvrduBrisanjaPredmeta}>
               Обриши
             </button>
           </div>
@@ -148,15 +175,38 @@ export default function PredmetProjekti() {
         </p>
       ) : (
         <div className="predmeti-grid">
-          {filtriraniProjekti.map((projekat) => (
-            <div className="predmet-kartica" key={projekat.idProjekta}>
-              <div className="predmet-naziv">{projekat.naziv}</div>
-              <div className="predmet-info">{projekat.opis}</div>
-              <Link to={`/osoba/${projekat.idStudenta}`} className="predmet-info">
-                Аутор: студент #{projekat.idStudenta}
-              </Link>
-            </div>
-          ))}
+          {filtriraniProjekti.map((projekat) => {
+            const mozeDaObrise = osoba?.idOsobe === projekat.idStudenta || (jeProfesor && vecPredaje)
+            return (
+              <div
+                className="predmet-kartica"
+                key={projekat.idProjekta}
+                onClick={() => navigate(`/projekti/${projekat.idProjekta}`)}
+              >
+                <div className="predmet-naziv">{projekat.naziv}</div>
+                <div className="predmet-info">{projekat.opis}</div>
+                <Link
+                  to={`/osoba/${projekat.idStudenta}`}
+                  className="predmet-info"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Аутор: {nazivAutora(projekat.idStudenta)}
+                </Link>
+                {mozeDaObrise && (
+                  <button
+                    type="button"
+                    className="projekat-obrisi"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      trazipotvrduBrisanjaProjekta(projekat)
+                    }}
+                  >
+                    Обриши
+                  </button>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
 
@@ -205,6 +255,17 @@ export default function PredmetProjekti() {
             </button>
           </form>
         </Overlay>
+      )}
+
+      {potvrda && (
+        <Potvrda
+          poruka={potvrda.poruka}
+          onPotvrdi={() => {
+            potvrda.akcija()
+            setPotvrda(null)
+          }}
+          onOdustani={() => setPotvrda(null)}
+        />
       )}
     </div>
   )

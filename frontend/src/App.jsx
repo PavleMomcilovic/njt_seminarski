@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Glavna from './pages/Glavna'
 import Predmeti from './pages/Predmeti'
 import PredmetProjekti from './pages/PredmetProjekti'
+import ProjekatDetalji from './pages/ProjekatDetalji'
 import NoviProjekat from './pages/NoviProjekat'
 import Zajednica from './pages/Zajednica'
 import Profil from './pages/Profil'
@@ -45,6 +46,7 @@ function RutePrijave() {
         <Route path="/predmeti" element={<Predmeti />} />
         <Route path="/predmeti/:id" element={<PredmetProjekti />} />
         <Route path="/predmeti/:id/novi-projekat" element={<NoviProjekat />} />
+        <Route path="/projekti/:id" element={<ProjekatDetalji />} />
         <Route path="/zajednica" element={<Zajednica />} />
         <Route path="/osoba/:id" element={<Profil />} />
       </Route>

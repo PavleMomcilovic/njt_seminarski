@@ -68,7 +68,7 @@ export default function Login() {
         </div>
 
         <button type="submit" className="auth-submit" disabled={ucitava}>
-          {ucitava ? 'Пријављивање...' : 'Пријави се'}
+          {ucitava ? 'Пријављивање...' : 'Пријавите се'}
         </button>
       </form>
 

@@ -1,0 +1,42 @@
+.projekat-detalji {
+  max-width: 640px;
+}
+
+.projekat-opis {
+  margin: 16px 0 28px;
+  color: var(--text-h);
+  white-space: pre-wrap;
+}
+
+.resursi-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.resurs-red {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.resurs-preuzmi {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.resurs-preuzmi:hover {
+  opacity: 0.9;
+}

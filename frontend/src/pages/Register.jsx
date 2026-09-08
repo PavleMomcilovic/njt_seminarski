@@ -148,7 +148,7 @@ export default function Register() {
         )}
 
         <button type="submit" className="auth-submit" disabled={ucitava}>
-          {ucitava ? 'Регистрација у току...' : 'Региструј се'}
+          {ucitava ? 'Регистрација у току...' : 'Региструјте се'}
         </button>
       </form>
 

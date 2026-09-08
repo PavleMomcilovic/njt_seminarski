@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import { getOsobaById } from '../api/osobe'
 import { getPredmeti } from '../api/predmeti'
-import { getVerifikacijeZaStudenta, upisiOcenu } from '../api/verifikacije'
+import { getVerifikacijeZaStudenta, upisiOcenu, verifikujStudenta } from '../api/verifikacije'
 import { getKatedre, getZvanja, logout, extractErrorMessage } from '../api/auth'
+import { odgovaraPretrazi } from '../utils/pretraga'
 import { useAuth } from '../context/AuthContext'
+import '../pages/Predmeti.css'
 import './Profil.css'
 
 const STATUS_NAZIVI = { AKTIVAN: 'Активан', APSOLVENT: 'Апсолвент', NEAKTIVAN: 'Неактиван' }
@@ -25,8 +28,20 @@ export default function Profil() {
   const [verifikacije, setVerifikacije] = useState([])
   const [izmene, setIzmene] = useState({})
   const [greska, setGreska] = useState('')
+  const [pretragaPredmeta, setPretragaPredmeta] = useState('')
 
   const sopstveniProfil = ulogovan && Number(id) === ulogovan.idOsobe
+  const gledaProfesor = osoba?.tip === 'STUDENT' && ulogovan?.tip === 'PROFESOR'
+
+  const predmetiKojePredaje = useMemo(
+    () => predmeti.filter((p) => p.idProfesori?.includes(ulogovan?.idOsobe)),
+    [predmeti, ulogovan]
+  )
+
+  const filtriraniPredmetiZaVerifikaciju = useMemo(
+    () => predmetiKojePredaje.filter((p) => odgovaraPretrazi(p.naziv, pretragaPredmeta)),
+    [predmetiKojePredaje, pretragaPredmeta]
+  )
 
   useEffect(() => {
     let otkazano = false
@@ -75,6 +90,20 @@ export default function Profil() {
     }))
   }
 
+  async function verifikujZaPredmet(idPredmeta) {
+    setGreska('')
+    try {
+      const azurirano = await verifikujStudenta(osoba.idOsobe, idPredmeta)
+      setVerifikacije((prev) =>
+        prev.some((v) => v.idPredmeta === idPredmeta)
+          ? prev.map((v) => (v.idPredmeta === idPredmeta ? azurirano : v))
+          : [...prev, azurirano]
+      )
+    } catch (err) {
+      setGreska(extractErrorMessage(err))
+    }
+  }
+
   async function sacuvajVerifikaciju(v) {
     setGreska('')
     const izmena = izmene[v.idPredmeta] || {}
@@ -121,8 +150,48 @@ export default function Profil() {
 
       {sopstveniProfil && (
         <button type="button" className="profil-logout" onClick={handleLogout}>
-          Одјави се
+          Одјава
         </button>
+      )}
+
+      {gledaProfesor && (
+        <section className="profil-predmeti">
+          <h2>Верификујте студента за предмет</h2>
+          <input
+            type="text"
+            className="pretraga-input"
+            placeholder="Претражите предмете..."
+            value={pretragaPredmeta}
+            onChange={(e) => setPretragaPredmeta(e.target.value)}
+          />
+          {filtriraniPredmetiZaVerifikaciju.length === 0 ? (
+            <p>
+              {predmetiKojePredaje.length === 0
+                ? 'Не предајете ниједан предмет.'
+                : 'Нема предмета који одговарају претрази.'}
+            </p>
+          ) : (
+            <ul className="verifikacija-predmeti-lista">
+              {filtriraniPredmetiZaVerifikaciju.map((p) => {
+                const vecVerifikovan = verifikacije.some((v) => v.idPredmeta === p.idPredmeta && v.status)
+                return (
+                  <li key={p.idPredmeta} className="verifikacija-predmet-red">
+                    <span>{p.naziv}</span>
+                    <button
+                      type="button"
+                      className={`predmet-predaje-toggle ${vecVerifikovan ? 'predaje' : 'ne-predaje'}`}
+                      onClick={() => verifikujZaPredmet(p.idPredmeta)}
+                      title={vecVerifikovan ? 'Студент је верификован за овај предмет' : 'Кликните за верификацију студента за овај предмет'}
+                      aria-label={vecVerifikovan ? 'Студент верификован' : 'Верификуј студента за предмет'}
+                    >
+                      {vecVerifikovan ? <FaCheckCircle size={18} /> : <FaTimesCircle size={18} />}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </section>
       )}
 
       {osoba.tip === 'STUDENT' && (
