@@ -7,3 +7,9 @@ services:
       - 'POSTGRES_USER=${DB_USERNAME}'
     ports:
       - '5432:5432'
+    volumes:
+      - fonsledje_pgdata:/var/lib/postgresql
+
+volumes:
+  fonsledje_pgdata:
+    external: true
