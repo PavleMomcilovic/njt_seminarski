@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.fonsledje.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,10 +128,9 @@ public class VerifikacijaServiceImpl implements VerifikacijaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<VerifikacijaDto> findByStudent(Long idStudenta) {
-        return verifikacijaRepository.findByStudent_IdOsobe(idStudenta).stream()
-                .map(verifikacijaConverter::toDto)
-                .collect(Collectors.toList());
+    public Page<VerifikacijaDto> findByStudent(Long idStudenta, Pageable pageable) {
+        return verifikacijaRepository.findByStudent_IdOsobe(idStudenta, pageable)
+                .map(verifikacijaConverter::toDto);
     }
 
     @Override

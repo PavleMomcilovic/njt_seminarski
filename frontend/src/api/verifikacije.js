@@ -1,8 +1,10 @@
 import client from './client'
 
-export async function getVerifikacijeZaStudenta(idStudenta) {
-  const response = await client.get(`/verifikacije/student/${idStudenta}`)
-  return response.data.data.values
+export async function getVerifikacijeZaStudenta(idStudenta, page = 0, size = 5) {
+  const response = await client.get(`/verifikacije/student/${idStudenta}`, {
+    params: { page, size, sort: 'datum,desc' }
+  })
+  return response.data.data
 }
 
 export async function upisiOcenu(idStudenta, idPredmeta, dto) {

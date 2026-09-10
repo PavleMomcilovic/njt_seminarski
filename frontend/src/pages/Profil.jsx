@@ -26,6 +26,8 @@ export default function Profil() {
   const [zvanja, setZvanja] = useState([])
   const [predmeti, setPredmeti] = useState([])
   const [verifikacije, setVerifikacije] = useState([])
+  const [stranica, setStranica] = useState(0)
+  const [ukupnoStranica, setUkupnoStranica] = useState(0)
   const [izmene, setIzmene] = useState({})
   const [greska, setGreska] = useState('')
   const [pretragaPredmeta, setPretragaPredmeta] = useState('')
@@ -45,18 +47,17 @@ export default function Profil() {
 
   useEffect(() => {
     let otkazano = false
+    setStranica(0)
 
     async function ucitaj() {
       setOsoba(null)
       setVerifikacije([])
+      setUkupnoStranica(0)
       const osobaPodaci = await getOsobaById(id)
       if (otkazano) return
       setOsoba(osobaPodaci)
 
-      if (osobaPodaci.tip === 'STUDENT') {
-        const v = await getVerifikacijeZaStudenta(osobaPodaci.idOsobe)
-        if (!otkazano) setVerifikacije(v)
-      } else if (osobaPodaci.tip === 'PROFESOR') {
+      if (osobaPodaci.tip === 'PROFESOR') {
         const [k, z] = await Promise.all([getKatedre(), getZvanja()])
         if (!otkazano) {
           setKatedre(k)
@@ -72,6 +73,23 @@ export default function Profil() {
       otkazano = true
     }
   }, [id])
+
+  useEffect(() => {
+    if (osoba?.tip !== 'STUDENT') return
+    let otkazano = false
+
+    getVerifikacijeZaStudenta(osoba.idOsobe, stranica, 5)
+      .then((v) => {
+        if (otkazano) return
+        setVerifikacije(v.values)
+        setUkupnoStranica(v.totalPages)
+      })
+      .catch(() => {})
+
+    return () => {
+      otkazano = true
+    }
+  }, [osoba, stranica])
 
   async function handleLogout() {
     await logout()
@@ -270,6 +288,38 @@ export default function Profil() {
                 })}
               </tbody>
             </table>
+          )}
+          {ukupnoStranica > 1 && (
+            <div className="paginacija">
+              <button
+                type="button"
+                className="paginacija-strelica"
+                disabled={stranica === 0}
+                onClick={() => setStranica((s) => s - 1)}
+                aria-label="Претходна страна"
+              >
+                &#8592;
+              </button>
+              {Array.from({ length: ukupnoStranica }, (_, br) => br).map((br) => (
+                <button
+                  key={br}
+                  type="button"
+                  className={`paginacija-broj ${br === stranica ? 'aktivna' : ''}`}
+                  onClick={() => setStranica(br)}
+                >
+                  {br + 1}
+                </button>
+              ))}
+              <button
+                type="button"
+                className="paginacija-strelica"
+                disabled={stranica + 1 >= ukupnoStranica}
+                onClick={() => setStranica((s) => s + 1)}
+                aria-label="Следећа страна"
+              >
+                &#8594;
+              </button>
+            </div>
           )}
         </section>
       )}

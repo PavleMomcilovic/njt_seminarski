@@ -1,5 +1,8 @@
 package rs.ac.bg.fon.fonsledje.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,10 +37,18 @@ public class VerifikacijaController {
     }
 
     @GetMapping("/student/{idStudenta}")
-    public ResponseEntity<Response> getByStudent(@PathVariable Long idStudenta) {
-        List<VerifikacijaDto> verifikacije = verifikacijaService.findByStudent(idStudenta);
+    public ResponseEntity<Response> getByStudent(
+            @PathVariable Long idStudenta,
+            @PageableDefault(size = 5, sort = "datum") Pageable pageable) {
+        Page<VerifikacijaDto> stranice = verifikacijaService.findByStudent(idStudenta, pageable);
         return ResponseEntity.ok(
-                HttpResponse.getResponseWithData("Успешно пронађене верификације.", Map.of("values", verifikacije), HttpStatus.OK)
+                HttpResponse.getResponseWithData("Успешно пронађене верификације.",
+                        Map.of(
+                                "values", stranice.getContent(),
+                                "totalPages", stranice.getTotalPages(),
+                                "totalElements", stranice.getTotalElements(),
+                                "currentPage", stranice.getNumber()
+                        ), HttpStatus.OK)
         );
     }
 

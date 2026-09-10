@@ -85,3 +85,38 @@
   font-size: 14px;
   color: var(--text-h);
 }
+
+.paginacija {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.paginacija-strelica,
+.paginacija-broj {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.paginacija-strelica:hover:not(:disabled),
+.paginacija-broj:hover {
+  background: var(--accent-bg);
+}
+
+.paginacija-strelica:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.paginacija-broj.aktivna {
+  border: 2px solid var(--accent);
+  font-weight: 600;
+}

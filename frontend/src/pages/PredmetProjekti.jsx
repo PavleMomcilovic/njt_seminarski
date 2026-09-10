@@ -31,7 +31,7 @@ export default function PredmetProjekti() {
   const vecPredaje = predmet?.idProfesori?.includes(osoba?.idOsobe)
 
   const filtriraniProjekti = useMemo(
-    () => projekti.filter((p) => odgovaraPretrazi(p.naziv, pretraga)),
+    () => projekti.filter((p) => odgovaraPretrazi([p.naziv, p.opis], pretraga)),
     [projekti, pretraga]
   )
 

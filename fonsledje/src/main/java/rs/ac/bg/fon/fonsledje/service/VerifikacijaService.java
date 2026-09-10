@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.fonsledje.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import rs.ac.bg.fon.fonsledje.dto.VerifikacijaDto;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public interface VerifikacijaService {
 
     VerifikacijaDto verifikujStudenta(Long idStudenta, Long idPredmeta, Long idProfesoraUlogovanog);
 
-    List<VerifikacijaDto> findByStudent(Long idStudenta);
+    Page<VerifikacijaDto> findByStudent(Long idStudenta, Pageable pageable);
 
     List<VerifikacijaDto> findAll();
 }

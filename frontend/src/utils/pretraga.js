@@ -32,10 +32,10 @@ function escapeRegex(tekst) {
   return tekst.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-export function odgovaraPretrazi(naziv, upit) {
+export function odgovaraPretrazi(vrednosti, upit) {
   const normalizovanUpit = latinicaUCirilicu(upit || '')
   if (!normalizovanUpit) return true
-  const normalizovanNaziv = latinicaUCirilicu(naziv || '')
   const regex = new RegExp(escapeRegex(normalizovanUpit), 'i')
-  return regex.test(normalizovanNaziv)
+  const lista = Array.isArray(vrednosti) ? vrednosti : [vrednosti]
+  return lista.some((v) => regex.test(latinicaUCirilicu(v || '')))
 }
