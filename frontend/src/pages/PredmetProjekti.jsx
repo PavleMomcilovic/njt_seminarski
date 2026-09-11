@@ -41,9 +41,9 @@ export default function PredmetProjekti() {
     getOsobe().then(setOsobe).catch(() => {})
 
     if (osoba?.tip === 'STUDENT') {
-      getVerifikacijeZaStudenta(osoba.idOsobe)
-        .then((verifikacije) =>
-          setVerifikovan(verifikacije.some((v) => v.idPredmeta === Number(id) && v.status))
+      getVerifikacijeZaStudenta(osoba.idOsobe, 0, 1000)
+        .then((rezultat) =>
+          setVerifikovan(rezultat.values.some((v) => v.idPredmeta === Number(id) && v.status))
         )
         .catch(() => {})
     }
